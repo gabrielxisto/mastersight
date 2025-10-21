@@ -1,22 +1,48 @@
 import { useEffect, useState } from "react";
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute } from "@tanstack/react-router";
 import { ChevronDown, MoreHorizontal, Plus } from "lucide-react";
 
-import { flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable, type ColumnDef, type ColumnFiltersState, type SortingState, type VisibilityState } from "@tanstack/react-table";
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+  type ColumnDef,
+  type ColumnFiltersState,
+  type SortingState,
+  type VisibilityState,
+} from "@tanstack/react-table";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 import { useCompanyStore } from "@/stores/";
 import api from "@/services/api.service";
-import toast from 'react-hot-toast';
+import toast from "react-hot-toast";
 import { messages } from "@/lib/texts";
 import DepartmentsDialogs from "@/components/company/departments/departments-dialogs";
 
-export const Route = createFileRoute('/_company/company/archive/departments')({
+export const Route = createFileRoute("/_company/company/archive/departments")({
   component: DepartmentsComponent,
-})
+});
 
 type Data = {
   id: number;
@@ -31,11 +57,13 @@ type ColumnDefWithName = ColumnDef<Data[]> & { name?: string };
 
 function DepartmentsComponent() {
   const columns: ColumnDefWithName[] = [
-    { 
+    {
       name: "ID",
       accessorKey: "id",
       header: () => <div className="uppercase text-center">ID</div>,
-      cell: ({ row }) => <div className="text-center">{row.getValue("id")}</div>,
+      cell: ({ row }) => (
+        <div className="text-center">{row.getValue("id")}</div>
+      ),
       enableSorting: false,
       enableHiding: false,
     },
@@ -43,31 +71,43 @@ function DepartmentsComponent() {
       name: "Nome",
       accessorKey: "name",
       header: "Nome",
-      cell: ({ row }) => <div className="text-start capitalize truncate">{row.getValue("name")}</div>,
+      cell: ({ row }) => (
+        <div className="text-start capitalize truncate">
+          {row.getValue("name")}
+        </div>
+      ),
     },
     {
       name: "Descrição",
       accessorKey: "description",
       header: "Descrição",
-      cell: ({ row }) => <div className="text-start lowercase">{row.getValue("description")}</div>,
+      cell: ({ row }) => (
+        <div className="text-start truncate">
+          {row.getValue("description")}
+        </div>
+      ),
     },
     {
       name: "Usuários",
       accessorKey: "users",
       header: () => <div className="text-center">Usuários</div>,
-      cell: ({ row }) => <div className="text-center font-medium">{row.getValue("users")}</div>,
+      cell: ({ row }) => (
+        <div className="text-center font-medium">{row.getValue("users")}</div>
+      ),
     },
     {
       name: "Cargos",
       accessorKey: "roles",
       header: () => <div className="text-center">Cargos</div>,
-      cell: ({ row }) => <div className="text-center font-medium">{row.getValue("roles")}</div>,
+      cell: ({ row }) => (
+        <div className="text-center font-medium">{row.getValue("roles")}</div>
+      ),
     },
     {
       id: "actions",
       enableHiding: false,
       cell: ({ row }) => {
-        const department = row.original
+        const department = row.original;
 
         return (
           <DropdownMenu>
@@ -85,29 +125,29 @@ function DepartmentsComponent() {
                 Copiar ID
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem 
+              <DropdownMenuItem
                 onClick={() => {
-                  setOpenDialog("edit")
-                  setDialogData(department)
+                  setOpenDialog("edit");
+                  setDialogData(department);
                 }}
               >
                 Editar
               </DropdownMenuItem>
-              <DropdownMenuItem 
+              <DropdownMenuItem
                 onClick={() => {
-                  setOpenDialog("delete")
-                  setDialogData(department)
-                }} 
+                  setOpenDialog("delete");
+                  setDialogData(department);
+                }}
                 className="text-red-500"
               >
                 Deletar
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-        )
+        );
       },
     },
-  ]
+  ];
 
   const company = useCompanyStore();
   const [openDialog, setOpenDialog] = useState<boolean | string>(false);
@@ -116,7 +156,7 @@ function DepartmentsComponent() {
 
   const table = useReactTable({
     data: Array.isArray(departments) ? departments : [],
-    columns,    
+    columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -124,87 +164,98 @@ function DepartmentsComponent() {
     initialState: {
       pagination: {
         pageSize: 9,
-      }
+      },
     },
-  })
+  });
 
   const createDepartment = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
+    event.preventDefault();
 
-    const formData = new FormData(event.currentTarget)
-    const name = formData.get("name")
-    const description = formData.get("description")
-    const salary = formData.get("salary")
+    const formData = new FormData(event.currentTarget);
+    const name = formData.get("name");
+    const description = formData.get("description");
+    const salary = formData.get("salary");
 
-    api.post("/companies/departments/create", { 
-      companyId: company.current?.id, 
-      name, 
-      description, 
-      salary }
-    ).then(() => {
-      setOpenDialog(false)
-      toast(messages.success["department-created"])
-      refreshDepartments()
-    })
-  }
+    api
+      .post("/companies/departments/create", {
+        companyId: company.current?.id,
+        name,
+        description,
+        salary,
+      })
+      .then(() => {
+        setOpenDialog(false);
+        toast.success(messages.success["department-created"]);
+        refreshDepartments();
+      });
+  };
 
   const editDepartment = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
+    event.preventDefault();
 
-    const formData = new FormData(event.currentTarget)
-    const name = formData.get("name")
-    const description = formData.get("description")
-    const salary = formData.get("salary")
-    const id = dialogData?.id
+    const formData = new FormData(event.currentTarget);
+    const name = formData.get("name");
+    const description = formData.get("description");
+    const salary = formData.get("salary");
+    const id = dialogData?.id;
 
-    api.post("/companies/departments/update", { 
-      id, 
-      companyId: company.current?.id, 
-      name, 
-      description, 
-      salary 
-    }).then(() => {
-      setOpenDialog(false)
-      toast(messages.success["department-edited"])
-      refreshDepartments()
-    })
-  }
+    api
+      .post("/companies/departments/update", {
+        id,
+        companyId: company.current?.id,
+        name,
+        description,
+        salary,
+      })
+      .then(() => {
+        setOpenDialog(false);
+        toast.success(messages.success["department-edited"]);
+        refreshDepartments();
+      });
+  };
 
   const deleteDepartment = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
+    event.preventDefault();
 
-    const formData = new FormData(event.currentTarget)
-    const id = formData.get("id")
+    const formData = new FormData(event.currentTarget);
+    const id = formData.get("id");
 
-    api.post("/companies/departments/delete", { 
-      id: Number(id), 
-      companyId: company.current?.id, 
-    }).then(() => {
-      setOpenDialog(false)
-      toast(messages.success["department-deleted"])
-      refreshDepartments()
-    })
-  }
-
-  const refreshDepartments = () => { 
-    if (company.current?.id) {
-      api.get(`/companies/departments?companyId=${company.current?.id}`).then((response) => {
-        setDepartments(response.data.departments)
-      }).catch((error) => {
-        console.log(error.response.data.error)
+    api
+      .post("/companies/departments/delete", {
+        id: Number(id),
+        companyId: company.current?.id,
       })
+      .then(() => {
+        setOpenDialog(false);
+        toast.success(messages.success["department-deleted"]);
+        refreshDepartments();
+      });
+  };
+
+  const refreshDepartments = () => {
+    if (company.current?.id) {
+      api
+        .get(`/companies/departments?companyId=${company.current?.id}`)
+        .then((response) => {
+          setDepartments(response.data.departments);
+        })
+        .catch((error) => {
+          console.log(error.response.data.error);
+        });
     }
-  }
+  };
 
   useEffect(() => {
-    refreshDepartments()
-  }, [company.current?.id])
+    refreshDepartments();
+  }, [company.current?.id]);
 
   return (
-    <main className='p-5'>
+    <main className="px-10 py-5">
       <header>
-        <h1 className='text-2xl font-bold tracking-tight'>Departamentos</h1>
-        <p className='text-sm text-muted-foreground'>Gerencie os departamentos da sua empresa aqui.</p>
+        <h1 className="text-2xl font-bold tracking-tight">Departamentos</h1>
+        <p className="text-sm text-muted-foreground">
+          Gerencie os departamentos da sua empresa aqui.
+        </p>
       </header>
 
       <div className="w-full">
@@ -218,7 +269,10 @@ function DepartmentsComponent() {
             className="max-w-sm"
           />
           <div className="flex gap-2">
-            <Button onClick={() => setOpenDialog("add")} className="ml-auto cursor-pointer">
+            <Button
+              onClick={() => setOpenDialog("add")}
+              className="ml-auto cursor-pointer"
+            >
               Criar <Plus />
             </Button>
             <DropdownMenu>
@@ -245,7 +299,7 @@ function DepartmentsComponent() {
                       >
                         {label}
                       </DropdownMenuCheckboxItem>
-                    )
+                    );
                   })}
               </DropdownMenuContent>
             </DropdownMenu>
@@ -263,10 +317,10 @@ function DepartmentsComponent() {
                           ? null
                           : flexRender(
                               header.column.columnDef.header,
-                              header.getContext()
+                              header.getContext(),
                             )}
                       </TableHead>
-                    )
+                    );
                   })}
                 </TableRow>
               ))}
@@ -279,10 +333,13 @@ function DepartmentsComponent() {
                     data-state={row.getIsSelected() && "selected"}
                   >
                     {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id} className="truncate max-w-[180px]">
+                      <TableCell
+                        key={cell.id}
+                        className="truncate max-w-[180px]"
+                      >
                         {flexRender(
                           cell.column.columnDef.cell,
-                          cell.getContext()
+                          cell.getContext(),
                         )}
                       </TableCell>
                     ))}
@@ -336,7 +393,5 @@ function DepartmentsComponent() {
         }}
       />
     </main>
-
-
-  )
+  );
 }

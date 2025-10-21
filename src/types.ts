@@ -17,8 +17,8 @@ export type Company = {
     cnpj: string;
     image: string;
     color: string;
-    departmens: Department[];
-    role: Role[];
+    departments: Department[];
+    roles: Role[];
     lastAccess?: number;
 };
 
@@ -35,7 +35,7 @@ export type Role = {
   id: number;
   name: string;
   company: number;
-  department: number;
+  departmentId: number;
   salary: number;
 }
 

@@ -1,49 +1,57 @@
-import { useForm, FormProvider } from 'react-hook-form';
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { formatCpf } from '@/lib/formater';
-import type { UserFormValues } from './settings';
+import { useForm, FormProvider } from "react-hook-form";
+import {
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { formatCpf } from "@/lib/formatter";
+import type { UserFormValues } from "./settings";
 
-import { format } from "date-fns"
-import { ptBR } from "date-fns/locale"; 
-import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
+} from "@/components/ui/popover";
 
-export default function({ 
-  data, 
-  errors, 
+export default function ({
+  data,
+  errors,
   set,
-  setErrors
-}: { 
-  data: UserFormValues, 
-  errors: { [key: string]: false | string },
-  set: (data: UserFormValues) => void,
-  setErrors: (errors: { [key: string]: false | string }) => void
+  setErrors,
+}: {
+  data: UserFormValues;
+  errors: { [key: string]: false | string };
+  set: (data: UserFormValues) => void;
+  setErrors: (errors: { [key: string]: false | string }) => void;
 }) {
   const form = useForm<UserFormValues>({
-    defaultValues: data
+    defaultValues: data,
   });
 
   return (
     <FormProvider {...form}>
-      <form className='space-y-[2.6rem]'>
+      <form className="space-y-[2.6rem]">
         <FormField
-          name='name'
+          name="name"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Nome</FormLabel>
               <FormControl>
-                <Input 
-                  placeholder='Nome da empresa' {...field} 
+                <Input
+                  placeholder="Nome da empresa"
+                  {...field}
                   value={data.name}
                   onChange={(e) => {
-                    set({ ...data, name: e.target.value })
-                    setErrors({ ...errors, name: false })
+                    set({ ...data, name: e.target.value });
+                    setErrors({ ...errors, name: false });
                   }}
                 />
               </FormControl>
@@ -55,31 +63,32 @@ export default function({
           )}
         />
         <FormField
-          name='cpf'
+          name="cpf"
           render={() => (
             <FormItem>
               <FormLabel>CPF</FormLabel>
               <FormControl>
                 <Input
-                  placeholder='Seu CPF'
+                  placeholder="Seu CPF"
                   value={data.cpf}
                   onChange={(e) => {
-                    const formatted = formatCpf(e.target.value)
-                    set({ ...data, cpf: formatted })
-                    setErrors({ ...errors, cpf: false })
+                    const formatted = formatCpf(e.target.value);
+                    set({ ...data, cpf: formatted });
+                    setErrors({ ...errors, cpf: false });
                   }}
                 />
               </FormControl>
               <FormDescription>
-                Seu CPF apenas será exibido para os administradores de suas empresas.
+                Seu CPF apenas será exibido para os administradores de suas
+                empresas.
               </FormDescription>
               <FormMessage>{errors.cpf}</FormMessage>
             </FormItem>
           )}
-        />  
+        />
 
         <FormField
-          name='date'
+          name="date"
           render={() => (
             <FormItem>
               <FormLabel>Data de Nascimento</FormLabel>
@@ -91,49 +100,37 @@ export default function({
                       data-empty={!data.birthday}
                       className="flex justify-start w-full h-full"
                     >
-                      {data.birthday ? format(data.birthday, "PPP", { locale: ptBR }) : <p className='font-regular text-start text-muted-foreground'>Seleciona uma data</p>}
+                      {data.birthday ? (
+                        format(data.birthday, "PPP", { locale: ptBR })
+                      ) : (
+                        <p className="font-regular text-start text-muted-foreground">
+                          Seleciona uma data
+                        </p>
+                      )}
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0">
-                    <Calendar 
-                      mode="single" 
-                      selected={data.birthday} 
+                    <Calendar
+                      mode="single"
+                      selected={new Date(data.birthday)}
+                      defaultMonth={new Date(data.birthday)}
                       onSelect={(value) => {
-                        if (value) set({ ...data, birthday: value })
-                        setErrors({ ...errors, birthday: false })
-                      }} 
+                        if (value) set({ ...data, birthday: value });
+                        setErrors({ ...errors, birthday: false });
+                      }}
                     />
                   </PopoverContent>
                 </Popover>
               </FormControl>
               <FormDescription>
-                Sua data de nascimento apenas será exibida para os administradores de suas empresas.
+                Sua data de nascimento apenas será exibida para os
+                administradores de suas empresas.
               </FormDescription>
               <FormMessage>{errors.birthday}</FormMessage>
             </FormItem>
           )}
         />
-
-        {/* <FormField
-          name='description'
-          render={() => (
-            <FormItem>
-              <FormLabel>Descrição</FormLabel>
-              <FormControl>
-                <Input 
-                  placeholder='Sua descrição' 
-                  value={data.description}  
-                  onChange={(e) => set({ ...data, description: e.target.value })}
-                />
-              </FormControl>
-              <FormDescription>
-                Adicione uma descrição, outros usuários poderão visualiza-la.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        /> */}
       </form>
     </FormProvider>
-  )
+  );
 }

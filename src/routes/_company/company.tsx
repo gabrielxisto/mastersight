@@ -1,42 +1,60 @@
-import { useEffect, useState } from 'react';
-import { createFileRoute, Outlet, useLocation, useRouter } from '@tanstack/react-router';
-import { Sun, MoonStar } from 'lucide-react';
+import { useEffect, useState } from "react";
+import {
+  createFileRoute,
+  Outlet,
+  useLocation,
+  useRouter,
+} from "@tanstack/react-router";
+import { Sun, MoonStar } from "lucide-react";
 
 import { AppSidebar } from "@/components/company/sidebar";
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
-import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
 
-import { useCompanyStore } from '@/stores/';
-import { titles } from '@/lib/texts';
+import { useCompanyStore } from "@/stores/";
+import { titles } from "@/lib/texts";
 
-export const Route = createFileRoute('/_company/company')({
+export const Route = createFileRoute("/_company/company")({
   component: CompanyComponent,
-})
+});
 
 function CompanyComponent() {
-  const { current: company } = useCompanyStore()
+  const { current: company } = useCompanyStore();
   const router = useRouter();
-  const [theme, setTheme] = useState(localStorage.getItem("mastersight-theme") || "light");
-  const [title, setTitle] = useState(['Início']);
+  const [theme, setTheme] = useState(
+    localStorage.getItem("mastersight-theme") || "light",
+  );
+  const [title, setTitle] = useState(["Início"]);
   const location = useLocation();
   const pathname = location.pathname;
 
   useEffect(() => {
-    if (!company) router.navigate({ to: '/dashboard' })
-  }, [])
+    if (!company) router.navigate({ to: "/dashboard" });
+  }, []);
 
   useEffect(() => {
-    let newTitle = ['Início'];
+    let newTitle = ["Início"];
 
     titles.map((item) => {
       if (pathname.includes(item.path)) {
         newTitle = item.title;
       }
-    })
+    });
 
     setTitle(newTitle);
-  }, [pathname])
+  }, [pathname]);
 
   const toggleTheme = () => {
     if (theme === "dark") {
@@ -48,7 +66,7 @@ function CompanyComponent() {
       localStorage.setItem("mastersight-theme", "dark");
       document.body.classList.add("dark");
     }
-  }
+  };
 
   return (
     <SidebarProvider>
@@ -66,12 +84,10 @@ function CompanyComponent() {
                 {title.length > 1 && (
                   <>
                     <BreadcrumbItem className="hidden md:block">
-                      <BreadcrumbLink href="#">
-                        {title[1]}
-                      </BreadcrumbLink>
+                      <BreadcrumbLink href="#">{title[1]}</BreadcrumbLink>
                     </BreadcrumbItem>
                     <BreadcrumbSeparator className="hidden md:block" />
-                  </>                  
+                  </>
                 )}
                 <BreadcrumbItem>
                   <BreadcrumbPage>{title[0]}</BreadcrumbPage>
@@ -81,19 +97,20 @@ function CompanyComponent() {
           </div>
 
           <button
-            type='button'
-            className='cursor-pointer mr-3 hover-opacity-90'
+            type="button"
+            className="cursor-pointer mr-6 hover-opacity-90"
             onClick={toggleTheme}
           >
-            {theme === "dark" 
-              ? <Sun className="size-5" />
-              : <MoonStar className="size-5" />
-            }
+            {theme === "dark" ? (
+              <Sun className="size-5" />
+            ) : (
+              <MoonStar className="size-5" />
+            )}
           </button>
         </header>
-         
+
         <Outlet />
       </SidebarInset>
     </SidebarProvider>
-  )
+  );
 }

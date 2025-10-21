@@ -54,7 +54,10 @@ function hexToRgba(hex: string) {
   const r = Number.parseInt(normalizedHex.substring(0, 2), 16);
   const g = Number.parseInt(normalizedHex.substring(2, 4), 16);
   const b = Number.parseInt(normalizedHex.substring(4, 6), 16);
-  const a = normalizedHex.length === 8 ? Number.parseInt(normalizedHex.substring(6, 8), 16) / 255 : 1;
+  const a =
+    normalizedHex.length === 8
+      ? Number.parseInt(normalizedHex.substring(6, 8), 16) / 255
+      : 1;
 
   return { r, g, b, a };
 }
@@ -74,7 +77,7 @@ const ColorPicker: React.FC<TColorPicker> = ({
 
   const debouncedOnChange = useMemo(
     () => debounce((newValue: string) => onChange(newValue), 50),
-    [onChange]
+    [onChange],
   );
 
   const handleChangeColor = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -88,7 +91,7 @@ const ColorPicker: React.FC<TColorPicker> = ({
       const newHex = rgbaToHex(r, g, b, a);
       debouncedOnChange(newHex);
     },
-    [debouncedOnChange]
+    [debouncedOnChange],
   );
 
   return (
@@ -103,7 +106,9 @@ const ColorPicker: React.FC<TColorPicker> = ({
           />
           <div className="w-full flex flex-col items-center gap-[1.5rem] md:gap-[1.5vw] mt-[0.5rem] md:mt-[0.5vw]">
             <div className="w-full h-[2.5rem] md:h-[2.5vw] flex items-center justify-center">
-              <label htmlFor="hex-input" className="mr-[0.5rem] md:mr-[0.5vw]">HEX</label>
+              <label htmlFor="hex-input" className="mr-[0.5rem] md:mr-[0.5vw]">
+                HEX
+              </label>
               <Input
                 id="hex-input"
                 className="w-full !rounded-r-none !tracking-widest"

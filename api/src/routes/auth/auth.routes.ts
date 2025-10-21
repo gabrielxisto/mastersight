@@ -27,7 +27,7 @@ export default async function(fastify: FastifyInstance) {
 			const token = fastify.jwt.sign({ id: user.id, user: true });
 			reply.setCookie("mastersight-access", token, { httpOnly: true, path: "/" });
             
-			return reply.redirect(`${process.env.FRONTEND_ENDPOINT}/dashboard`);
+			return reply.status(200).send({ success: true });
 		} catch (err) {
 			console.error(err);
 			return reply.status(500).send({ error: "internal-server-error" });

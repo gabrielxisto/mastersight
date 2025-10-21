@@ -48,7 +48,7 @@ export default async function (fastify: FastifyInstance) {
             if (!inCompany) return reply.status(403).send({ error: "forbidden" });
 
             if (!companyId) return reply.status(400).send({ error: "invalid-company-id" });
-            if (!name || name.length < 3) return reply.status(400).send({ error: "invalid-name" });
+            if (!name || name.length < 2) return reply.status(400).send({ error: "invalid-name" });
             if (!salary || formattedSalary < 0) return reply.status(400).send({ error: "invalid-salary" });
             
             const department = await prisma.companiesDepartments.create({
@@ -79,7 +79,7 @@ export default async function (fastify: FastifyInstance) {
 
             const formattedSalary = formatCurrency(salary || "0");
 
-            if (!name || name.length < 3) return reply.status(400).send({ error: "invalid-name" });
+            if (!name || name.length < 2) return reply.status(400).send({ error: "invalid-name" });
             if (!salary || formattedSalary < 0) return reply.status(400).send({ error: "invalid-salary" });
 
             await prisma.companiesDepartments.update({

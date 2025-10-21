@@ -1,8 +1,9 @@
-import { useEffect } from 'react';
-import { useUserStore } from '@/stores/';
-import { useLocation, useRouter } from '@tanstack/react-router';
+import { useEffect } from "react";
+import { useUserStore } from "@/stores/";
+import { useLocation, useRouter } from "@tanstack/react-router";
+import { verifyAuthentication } from "@/lib/session";
 
-export default function({ children }: { children: React.ReactNode }) {
+export default function ({ children }: { children: React.ReactNode }) {
   const user = useUserStore();
   const router = useRouter();
   const location = useLocation();
@@ -13,9 +14,12 @@ export default function({ children }: { children: React.ReactNode }) {
     "/auth/register",
     "/auth/forgot",
     "/auth/reset",
-    "/admin/auth"
-  ]
+    "/admin/auth",
+  ];
 
+  useEffect(() => {
+    verifyAuthentication().then(user.set);
+  }, []);
 
   useEffect(() => {
     const isPublicRoute = publicRoutes.includes(pathname);
@@ -28,7 +32,7 @@ export default function({ children }: { children: React.ReactNode }) {
           router.navigate({ to: "/dashboard" });
         }
       } else {
-        router.navigate({ to: "/auth"});
+        router.navigate({ to: "/auth" });
       }
     } else {
       if (isPublicRoute) {
@@ -44,15 +48,12 @@ export default function({ children }: { children: React.ReactNode }) {
           if (pathname.includes("/admin")) {
             router.navigate({ to: "/admin/auth" });
           } else {
-            router.navigate({ to: "/auth"});
+            router.navigate({ to: "/auth" });
           }
         }
       }
     }
+  }, [pathname, user.current]);
 
-  }, [pathname, user.current])
-
-  return (
-    <>{children}</>
-  )
+  return <>{children}</>;
 }

@@ -1,5 +1,5 @@
-import { create } from 'zustand';
-import type { Company } from '@/types';
+import { create } from "zustand";
+import type { Company } from "@/types";
 
 type CompanyStore = {
   current: Company | false;

@@ -1,13 +1,15 @@
-import { useEffect, useState } from 'react';
-import { useLocation } from '@tanstack/react-router';
-import { Separator } from "@/components/ui/separator"
-import { SidebarTrigger } from "@/components/ui/sidebar"
+import { useEffect, useState } from "react";
+import { useLocation } from "@tanstack/react-router";
+import { Separator } from "@/components/ui/separator";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 
-import { Sun, MoonStar } from 'lucide-react'
-import { titles } from '@/lib/texts';
+import { Sun, MoonStar } from "lucide-react";
+import { titles } from "@/lib/texts";
 
 export function Header() {
-  const [theme, setTheme] = useState(localStorage.getItem("mastersight-theme") || "light");
+  const [theme, setTheme] = useState(
+    localStorage.getItem("mastersight-theme") || "light",
+  );
   const [title, setTitle] = useState("MasterSight");
   const location = useLocation();
   const pathname = location.pathname;
@@ -18,7 +20,7 @@ export function Header() {
         setTitle(item.title[0]);
       }
     });
-  }, [pathname])
+  }, [pathname]);
 
   const toggleTheme = () => {
     if (theme === "dark") {
@@ -30,7 +32,7 @@ export function Header() {
       localStorage.setItem("mastersight-theme", "dark");
       document.body.classList.add("dark");
     }
-  }
+  };
 
   return (
     <header className="flex h-(--header-height) shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height)">
@@ -44,15 +46,16 @@ export function Header() {
       </div>
 
       <button
-        type='button'
-        className='cursor-pointer mr-3 hover-opacity-90'
+        type="button"
+        className="cursor-pointer mr-6 hover-opacity-90"
         onClick={toggleTheme}
       >
-        {theme === "dark" 
-          ? <Sun className="size-5" />
-          : <MoonStar className="size-5" />
-        }
+        {theme === "dark" ? (
+          <Sun className="size-5" />
+        ) : (
+          <MoonStar className="size-5" />
+        )}
       </button>
     </header>
-  )
+  );
 }

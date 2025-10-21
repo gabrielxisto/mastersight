@@ -1,12 +1,35 @@
 import { useEffect, useState } from "react";
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute } from "@tanstack/react-router";
 import type { Role } from "@/types";
 import { ChevronDown, MoreHorizontal, Plus } from "lucide-react";
-import toast from 'react-hot-toast';
+import toast from "react-hot-toast";
 
-import { flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable, type ColumnDef } from "@tanstack/react-table";
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+  type ColumnDef,
+} from "@tanstack/react-table";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FacetedFilter } from "@/components/company/faceted-filter";
@@ -16,19 +39,21 @@ import { useCompanyStore } from "@/stores/";
 import { messages } from "@/lib/texts";
 import api from "@/services/api.service";
 
-export const Route = createFileRoute('/_company/company/archive/roles')({
+export const Route = createFileRoute("/_company/company/archive/roles")({
   component: RolesComponent,
-})
+});
 
 type ColumnDefWithName = ColumnDef<Role[]> & { name?: string };
 
 function RolesComponent() {
   const columns: ColumnDefWithName[] = [
-    { 
+    {
       name: "ID",
       accessorKey: "id",
       header: () => <div className="uppercase text-center">ID</div>,
-      cell: ({ row }) => <div className="text-center">{row.getValue("id")}</div>,
+      cell: ({ row }) => (
+        <div className="text-center">{row.getValue("id")}</div>
+      ),
       enableSorting: false,
       enableHiding: false,
     },
@@ -36,7 +61,11 @@ function RolesComponent() {
       name: "Nome",
       accessorKey: "name",
       header: "Nome",
-      cell: ({ row }) => <div className="text-start capitalize truncate">{row.getValue("name")}</div>,
+      cell: ({ row }) => (
+        <div className="text-start capitalize truncate">
+          {row.getValue("name")}
+        </div>
+      ),
     },
     {
       name: "Departamento",
@@ -50,25 +79,35 @@ function RolesComponent() {
         return filterValue.includes(cellValue);
       },
       header: () => <div className="text-center">Departamento</div>,
-      cell: ({ row }) => <div className="text-center font-medium">{row.getValue("department")}</div>,
+      cell: ({ row }) => (
+        <div className="text-center font-medium">
+          {row.getValue("department")}
+        </div>
+      ),
     },
     {
       name: "Salário",
       accessorKey: "salary",
       header: () => <div className="text-center">Salário</div>,
-      cell: ({ row }) => <div className="text-center uppercase">R$ {row.getValue("salary")?.toLocaleString("pt-BR")}</div>,
+      cell: ({ row }) => (
+        <div className="text-center uppercase">
+          R$ {row.getValue("salary")?.toLocaleString("pt-BR")}
+        </div>
+      ),
     },
     {
       name: "Usuários",
       accessorKey: "users",
       header: () => <div className="text-center">Usuários</div>,
-      cell: ({ row }) => <div className="text-center font-medium">{row.getValue("users")}</div>,
+      cell: ({ row }) => (
+        <div className="text-center font-medium">{row.getValue("users")}</div>
+      ),
     },
     {
       id: "actions",
       enableHiding: false,
       cell: ({ row }) => {
-        const role = row.original
+        const role = row.original;
 
         return (
           <DropdownMenu>
@@ -86,29 +125,29 @@ function RolesComponent() {
                 Copiar ID
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem 
+              <DropdownMenuItem
                 onClick={() => {
-                  setOpenDialog("edit")
-                  setDialogData(role)
+                  setOpenDialog("edit");
+                  setDialogData(role);
                 }}
               >
                 Editar
               </DropdownMenuItem>
-              <DropdownMenuItem 
+              <DropdownMenuItem
                 onClick={() => {
-                  setOpenDialog("delete")
-                  setDialogData(role)
-                }} 
+                  setOpenDialog("delete");
+                  setDialogData(role);
+                }}
                 className="text-red-500"
               >
                 Deletar
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-        )
+        );
       },
     },
-  ]
+  ];
 
   const company = useCompanyStore();
   const [openDialog, setOpenDialog] = useState<boolean | string>(false);
@@ -118,7 +157,7 @@ function RolesComponent() {
 
   const table = useReactTable({
     data: Array.isArray(roles) ? roles : [],
-    columns,    
+    columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -126,99 +165,120 @@ function RolesComponent() {
     initialState: {
       pagination: {
         pageSize: 9,
-      }
+      },
     },
-  })
+  });
 
-  const createRole = (event: React.FormEvent<HTMLFormElement>, departmentId: string) => {
-    event.preventDefault()
+  const createRole = (
+    event: React.FormEvent<HTMLFormElement>,
+    departmentId: string,
+  ) => {
+    event.preventDefault();
 
-    const formData = new FormData(event.currentTarget)
-    const name = formData.get("name")
-    const salary = formData.get("salary")
+    const formData = new FormData(event.currentTarget);
+    const name = formData.get("name");
+    const salary = formData.get("salary");
 
-    api.post("/companies/roles/create", { 
-      companyId: company.current?.id, 
-      name, 
-      departmentId: Number(departmentId), 
-      salary 
-    }).then(() => {
-      setOpenDialog(false)
-      toast(messages.success["role-created"])
-      refreshRoles()
-    })
-  }
+    api
+      .post("/companies/roles/create", {
+        companyId: company.current?.id,
+        name,
+        departmentId: Number(departmentId),
+        salary,
+      })
+      .then(() => {
+        setOpenDialog(false);
+        toast.success(messages.success["role-created"]);
+        refreshRoles();
+      });
+  };
 
-  const editRole = (event: React.FormEvent<HTMLFormElement>, departmentId: string) => {
-    event.preventDefault()
+  const editRole = (
+    event: React.FormEvent<HTMLFormElement>,
+    departmentId: string,
+  ) => {
+    event.preventDefault();
 
-    const formData = new FormData(event.currentTarget)
-    const name = formData.get("name")
-    const salary = formData.get("salary")
-    const id = dialogData?.id
+    const formData = new FormData(event.currentTarget);
+    const name = formData.get("name");
+    const salary = formData.get("salary");
+    const id = dialogData?.id;
 
-    api.post("/companies/roles/update", { 
-      id, 
-      companyId: company.current?.id, 
-      name, 
-      departmentId: Number(departmentId), 
-      salary
-    }).then(() => {
-      setOpenDialog(false)
-      toast(messages.success["role-updated"])
-      refreshRoles()
-    })
-  }
+    api
+      .post("/companies/roles/update", {
+        id,
+        companyId: company.current?.id,
+        name,
+        departmentId: Number(departmentId),
+        salary,
+      })
+      .then(() => {
+        setOpenDialog(false);
+        toast.success(messages.success["role-updated"]);
+        refreshRoles();
+      });
+  };
 
   const deleteRole = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
+    event.preventDefault();
 
-    const formData = new FormData(event.currentTarget)
-    const id = formData.get("id")
+    const formData = new FormData(event.currentTarget);
+    const id = formData.get("id");
 
-    api.post("/companies/roles/delete", { 
-      id: Number(id), 
-      companyId: company.current?.id, 
-    }).then(() => {
-      setOpenDialog(false)
-      toast(messages.success["role-deleted"])
-      refreshRoles()
-    })
-  }
-
-  const refreshRoles = () => { 
-    if (company.current?.id) {
-      api.get(`/companies/roles?companyId=${company.current?.id}`).then((response) => {
-        setRoles(response.data.roles)
-      }).catch((error) => {
-        console.log(error.response.data.error)
+    api
+      .post("/companies/roles/delete", {
+        id: Number(id),
+        companyId: company.current?.id,
       })
+      .then(() => {
+        setOpenDialog(false);
+        toast.success(messages.success["role-deleted"]);
+        refreshRoles();
+      });
+  };
+
+  const refreshRoles = () => {
+    if (company.current?.id) {
+      api
+        .get(`/companies/roles?companyId=${company.current?.id}`)
+        .then((response) => {
+          setRoles(response.data.roles);
+        })
+        .catch((error) => {
+          console.log(error.response.data.error);
+        });
     }
-  }
+  };
 
   useEffect(() => {
-    refreshRoles()
-  }, [company.current?.id])
+    refreshRoles();
+  }, [company.current?.id]);
 
   useEffect(() => {
     if (company.current?.id) {
-      api.get(`/companies/departments?companyId=${company.current?.id}`).then((response) => {
-        setFilters(response.data.departments.map((department: any) => ({
-          label: department.name,
-          value: department.name
-        })))
-      }).catch((error) => {
-        console.log(error.response.data.error)
-      })
+      api
+        .get(`/companies/departments?companyId=${company.current?.id}`)
+        .then((response) => {
+          setFilters(
+            response.data.departments.map((department: any) => ({
+              label: department.name,
+              value: department.name,
+            })),
+          );
+        })
+        .catch((error) => {
+          console.log(error.response.data.error);
+        });
     }
-  }, [])
-
+  }, []);
 
   return (
-    <main className='p-5'>
+    <main className="px-10 py-5">
       <header>
-        <h1 className='text-2xl font-bold tracking-tight'>Cargos</h1>
-        <p className='text-sm text-muted-foreground'>Gerencie os cargos da sua empresa aqui.</p>
+        <h1 className="text-2xl font-bold tracking-tight">Cargos</h1>
+        <p className="text-sm text-muted-foreground">
+          Gerencie os cargos da sua empresa aqui.
+        </p>
       </header>
 
       <div className="w-full">
@@ -226,9 +286,11 @@ function RolesComponent() {
           <div className="flex items-center gap-3">
             <Input
               placeholder="Pesquisar"
-              value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+              value={
+                (table.getColumn("name")?.getFilterValue() as string) ?? ""
+              }
               onChange={(event) => {
-                table.getColumn("name")?.setFilterValue(event.target.value)     
+                table.getColumn("name")?.setFilterValue(event.target.value);
               }}
               className="w-80"
             />
@@ -240,7 +302,10 @@ function RolesComponent() {
             />
           </div>
           <div className="flex gap-2">
-            <Button onClick={() => setOpenDialog("add")} className="ml-auto cursor-pointer">
+            <Button
+              onClick={() => setOpenDialog("add")}
+              className="ml-auto cursor-pointer"
+            >
               Criar <Plus />
             </Button>
             <DropdownMenu>
@@ -267,7 +332,7 @@ function RolesComponent() {
                       >
                         {label}
                       </DropdownMenuCheckboxItem>
-                    )
+                    );
                   })}
               </DropdownMenuContent>
             </DropdownMenu>
@@ -285,10 +350,10 @@ function RolesComponent() {
                           ? null
                           : flexRender(
                               header.column.columnDef.header,
-                              header.getContext()
+                              header.getContext(),
                             )}
                       </TableHead>
-                    )
+                    );
                   })}
                 </TableRow>
               ))}
@@ -301,10 +366,13 @@ function RolesComponent() {
                     data-state={row.getIsSelected() && "selected"}
                   >
                     {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id} className="truncate max-w-[180px]">
+                      <TableCell
+                        key={cell.id}
+                        className="truncate max-w-[180px]"
+                      >
                         {flexRender(
                           cell.column.columnDef.cell,
-                          cell.getContext()
+                          cell.getContext(),
                         )}
                       </TableCell>
                     ))}
@@ -358,7 +426,5 @@ function RolesComponent() {
         }}
       />
     </main>
-
-
-  )
+  );
 }

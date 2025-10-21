@@ -1,13 +1,13 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute } from "@tanstack/react-router";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-export const Route = createFileRoute('/_admin/admin/auth')({
+export const Route = createFileRoute("/_admin/admin/auth")({
   component: AuthComponent,
-})
+});
 
 function AuthComponent() {
   return (
@@ -50,5 +50,5 @@ function AuthComponent() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

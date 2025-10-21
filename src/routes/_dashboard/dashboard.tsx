@@ -1,22 +1,22 @@
-import { useEffect } from 'react';
-import { createFileRoute, Outlet } from '@tanstack/react-router';
+import { useEffect } from "react";
+import { createFileRoute, Outlet } from "@tanstack/react-router";
 
 import { AppSidebar } from "@/components/dashboard/sidebar";
 import { Header } from "@/components/dashboard/header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
-import { useCompanyStore } from '@/stores/';
+import { useCompanyStore } from "@/stores/";
 
-export const Route = createFileRoute('/_dashboard/dashboard')({
+export const Route = createFileRoute("/_dashboard/dashboard")({
   component: DashboardComponent,
-})
+});
 
 function DashboardComponent() {
-  const { current: company, set: setCompany } = useCompanyStore()
+  const { current: company, set: setCompany } = useCompanyStore();
 
   useEffect(() => {
-    if (company) setCompany(false)
-  }, [])
+    if (company) setCompany(false);
+  }, []);
 
   return (
     <SidebarProvider
@@ -39,6 +39,5 @@ function DashboardComponent() {
         </div>
       </SidebarInset>
     </SidebarProvider>
-  )
+  );
 }
-

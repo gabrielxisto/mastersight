@@ -7,8 +7,8 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "ignore": ["src/routeTree.gen.ts"],
-    "include": ["src/**/*", ".vscode/*", "index.html", "vite.config.js"]
+    "ignore": ["src/routeTree.gen.ts", ".vscode/*"],
+    "include": ["api/**/*", "src/**/*", "index.html", "vite.config.js"]
   },
   "formatter": {
     "enabled": true,
@@ -28,5 +28,19 @@
     "formatter": {
       "quoteStyle": "double"
     }
-  }
+  },
+"overrides": [
+    {
+      "include": ["**/*.ts"],
+      "formatter": {
+        "indentWidth": 4
+      }
+    },
+    {
+      "include": ["**/*.tsx"],
+      "formatter": {
+        "indentWidth": 2
+      }
+    }
+  ]
 }

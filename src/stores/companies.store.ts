@@ -1,5 +1,5 @@
-import { create } from 'zustand';
-import type { Permissions } from '@/types';
+import { create } from "zustand";
+import type { Permissions } from "@/types";
 
 type Company = {
   id: number;

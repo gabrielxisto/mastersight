@@ -1,33 +1,46 @@
-import { useRouter, useLocation } from '@tanstack/react-router';
+import { useRouter, useLocation } from "@tanstack/react-router";
 
-import { EllipsisVertical, LogOut, User } from 'lucide-react'; 
-import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar";
+import { EllipsisVertical, LogOut, User } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  useSidebar,
+} from "@/components/ui/sidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { getInitials } from "@/lib/utils"
+import { getInitials } from "@/lib/utils";
 import { useUserStore } from "@/stores/";
-import api from "@/services/api.service"
+import api from "@/services/api.service";
 
 export function NavUser({
   user,
 }: {
   user: {
-    name: string
-    email: string
-    image: string
-  }
+    name: string;
+    email: string;
+    image: string;
+  };
 }) {
-  const { set: setUser } = useUserStore()
-  const { isMobile } = useSidebar()
+  const { set: setUser } = useUserStore();
+  const { isMobile } = useSidebar();
   const router = useRouter();
   const location = useLocation();
 
   const logout = () => {
     api.post("/auth/logout").then((response) => {
-      setUser(null)
-      window.location.href = "/auth"
-    })
-  }
+      setUser(null);
+      window.location.href = "/auth";
+    });
+  };
 
   return (
     <SidebarMenu>
@@ -39,13 +52,11 @@ export function NavUser({
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <Avatar className="h-8 w-8 rounded-lg grayscale">
-                <AvatarImage 
+                <AvatarImage
                   src={`${import.meta.env.VITE_CDN_ENDPOINT}/images/users/${user.image}`}
-                  alt={user.name} 
+                  alt={user.name}
                 />
-                <AvatarFallback 
-                  className="rounded-lg"
-                >
+                <AvatarFallback className="rounded-lg">
                   {getInitials(user.name)}
                 </AvatarFallback>
               </Avatar>
@@ -67,18 +78,18 @@ export function NavUser({
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage 
+                  <AvatarImage
                     src={`${import.meta.env.VITE_CDN_ENDPOINT}/images/users/${user.image}`}
-                    alt={user.name} 
+                    alt={user.name}
                   />
-                  <AvatarFallback 
-                    className="rounded-lg"
-                  >
+                  <AvatarFallback className="rounded-lg">
                     {getInitials(user.name)}
                   </AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="text-foreground truncate font-medium">{user.name}</span>
+                  <span className="text-foreground truncate font-medium">
+                    {user.name}
+                  </span>
                   <span className="text-muted-foreground truncate text-xs">
                     {user.email}
                   </span>
@@ -95,7 +106,7 @@ export function NavUser({
                     route = "/company/profile";
                   }
 
-                  router.navigate({ to: route })
+                  router.navigate({ to: route });
                 }}
               >
                 <User />
@@ -109,9 +120,7 @@ export function NavUser({
               </DropdownMenuItem> */}
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onClick={logout}
-            >
+            <DropdownMenuItem onClick={logout}>
               <LogOut />
               Sair
             </DropdownMenuItem>
@@ -119,5 +128,5 @@ export function NavUser({
         </DropdownMenu>
       </SidebarMenuItem>
     </SidebarMenu>
-  )
+  );
 }

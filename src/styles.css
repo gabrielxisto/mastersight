@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 
 @import "tailwindcss";
 
@@ -13,6 +13,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
 }
 
 code {
@@ -26,9 +27,9 @@ code {
 }
 
 :root {
-  --color-main: #567CEA;
-  --color-primary: #E5E5E5;
-  --color-secondary: #1E1E1E;
+  --color-main: #567cea;
+  --color-primary: #e5e5e5;
+  --color-secondary: #1e1e1e;
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -63,28 +64,11 @@ code {
   --sidebar-ring: oklch(0.708 0 0);
 }
 
-.bg-primary {
-  background-color: var(--color-primary);
+.scrollbar-hidden {
+  scrollbar-width: 0;
 }
-
-.bg-secondary {
-  background-color: var(--color-secondary);
-}
-
-.text-primary {
-  color: var(--color-primary);
-}
-
-.text-secondary {
-  color: var(--color-secondary);
-}
-
-.fill-primary {
-  fill: var(--color-primary)
-}
-
-.fill-secondary {
-  fill: var(--color-secondary)
+.scrollbar-hidden::-webkit-scrollbar {
+  width: 0;
 }
 
 @theme inline {
@@ -166,4 +150,8 @@ code {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+textarea {
+  resize: none;
 }

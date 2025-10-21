@@ -15,7 +15,6 @@ import { Route as AuthAuthRouteImport } from './routes/_auth/auth'
 import { Route as DashboardDashboardIndexRouteImport } from './routes/_dashboard/dashboard.index'
 import { Route as CompanyCompanyIndexRouteImport } from './routes/_company/company.index'
 import { Route as AuthAuthIndexRouteImport } from './routes/_auth/auth.index'
-import { Route as DashboardDashboardSettingsRouteImport } from './routes/_dashboard/dashboard.settings'
 import { Route as DashboardDashboardProfileRouteImport } from './routes/_dashboard/dashboard.profile'
 import { Route as DashboardDashboardInvitesRouteImport } from './routes/_dashboard/dashboard.invites'
 import { Route as DashboardDashboardDocsRouteImport } from './routes/_dashboard/dashboard.docs'
@@ -71,12 +70,6 @@ const AuthAuthIndexRoute = AuthAuthIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthAuthRoute,
 } as any)
-const DashboardDashboardSettingsRoute =
-  DashboardDashboardSettingsRouteImport.update({
-    id: '/settings',
-    path: '/settings',
-    getParentRoute: () => DashboardDashboardRoute,
-  } as any)
 const DashboardDashboardProfileRoute =
   DashboardDashboardProfileRouteImport.update({
     id: '/profile',
@@ -228,7 +221,6 @@ export interface FileRoutesByFullPath {
   '/dashboard/docs': typeof DashboardDashboardDocsRoute
   '/dashboard/invites': typeof DashboardDashboardInvitesRoute
   '/dashboard/profile': typeof DashboardDashboardProfileRoute
-  '/dashboard/settings': typeof DashboardDashboardSettingsRoute
   '/auth/': typeof AuthAuthIndexRoute
   '/company/': typeof CompanyCompanyIndexRoute
   '/dashboard/': typeof DashboardDashboardIndexRoute
@@ -258,7 +250,6 @@ export interface FileRoutesByTo {
   '/dashboard/docs': typeof DashboardDashboardDocsRoute
   '/dashboard/invites': typeof DashboardDashboardInvitesRoute
   '/dashboard/profile': typeof DashboardDashboardProfileRoute
-  '/dashboard/settings': typeof DashboardDashboardSettingsRoute
   '/auth': typeof AuthAuthIndexRoute
   '/company': typeof CompanyCompanyIndexRoute
   '/dashboard': typeof DashboardDashboardIndexRoute
@@ -291,7 +282,6 @@ export interface FileRoutesById {
   '/_dashboard/dashboard/docs': typeof DashboardDashboardDocsRoute
   '/_dashboard/dashboard/invites': typeof DashboardDashboardInvitesRoute
   '/_dashboard/dashboard/profile': typeof DashboardDashboardProfileRoute
-  '/_dashboard/dashboard/settings': typeof DashboardDashboardSettingsRoute
   '/_auth/auth/': typeof AuthAuthIndexRoute
   '/_company/company/': typeof CompanyCompanyIndexRoute
   '/_dashboard/dashboard/': typeof DashboardDashboardIndexRoute
@@ -326,7 +316,6 @@ export interface FileRouteTypes {
     | '/dashboard/docs'
     | '/dashboard/invites'
     | '/dashboard/profile'
-    | '/dashboard/settings'
     | '/auth/'
     | '/company/'
     | '/dashboard/'
@@ -356,7 +345,6 @@ export interface FileRouteTypes {
     | '/dashboard/docs'
     | '/dashboard/invites'
     | '/dashboard/profile'
-    | '/dashboard/settings'
     | '/auth'
     | '/company'
     | '/dashboard'
@@ -388,7 +376,6 @@ export interface FileRouteTypes {
     | '/_dashboard/dashboard/docs'
     | '/_dashboard/dashboard/invites'
     | '/_dashboard/dashboard/profile'
-    | '/_dashboard/dashboard/settings'
     | '/_auth/auth/'
     | '/_company/company/'
     | '/_dashboard/dashboard/'
@@ -460,13 +447,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/auth/'
       preLoaderRoute: typeof AuthAuthIndexRouteImport
       parentRoute: typeof AuthAuthRoute
-    }
-    '/_dashboard/dashboard/settings': {
-      id: '/_dashboard/dashboard/settings'
-      path: '/settings'
-      fullPath: '/dashboard/settings'
-      preLoaderRoute: typeof DashboardDashboardSettingsRouteImport
-      parentRoute: typeof DashboardDashboardRoute
     }
     '/_dashboard/dashboard/profile': {
       id: '/_dashboard/dashboard/profile'
@@ -723,7 +703,6 @@ interface DashboardDashboardRouteChildren {
   DashboardDashboardDocsRoute: typeof DashboardDashboardDocsRoute
   DashboardDashboardInvitesRoute: typeof DashboardDashboardInvitesRoute
   DashboardDashboardProfileRoute: typeof DashboardDashboardProfileRoute
-  DashboardDashboardSettingsRoute: typeof DashboardDashboardSettingsRoute
   DashboardDashboardIndexRoute: typeof DashboardDashboardIndexRoute
 }
 
@@ -731,7 +710,6 @@ const DashboardDashboardRouteChildren: DashboardDashboardRouteChildren = {
   DashboardDashboardDocsRoute: DashboardDashboardDocsRoute,
   DashboardDashboardInvitesRoute: DashboardDashboardInvitesRoute,
   DashboardDashboardProfileRoute: DashboardDashboardProfileRoute,
-  DashboardDashboardSettingsRoute: DashboardDashboardSettingsRoute,
   DashboardDashboardIndexRoute: DashboardDashboardIndexRoute,
 }
 

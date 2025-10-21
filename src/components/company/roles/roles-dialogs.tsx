@@ -2,37 +2,43 @@ import AddDialog from "./add-dialog";
 import EditDialog from "./edit-dialog";
 import DeleteDialog from "./delete-dialog";
 
-export default function({ 
-  open, 
-  onOpenChange, 
+export default function ({
+  open,
+  onOpenChange,
   data,
-  submits 
-}: { 
-  open: boolean | string; 
-  onOpenChange: (open: boolean) => void; 
+  submits,
+}: {
+  open: boolean | string;
+  onOpenChange: (open: boolean) => void;
   data: any;
-  submits: { 
-    add: (data: React.FormEvent<HTMLFormElement>, selectedDepartment: string) => void; 
-    edit: (data: React.FormEvent<HTMLFormElement>, selectedDepartment: string) => void; 
-    delete: (data: React.FormEvent<HTMLFormElement>) => void; 
-  }; 
+  submits: {
+    add: (
+      data: React.FormEvent<HTMLFormElement>,
+      selectedDepartment: string,
+    ) => void;
+    edit: (
+      data: React.FormEvent<HTMLFormElement>,
+      selectedDepartment: string,
+    ) => void;
+    delete: (data: React.FormEvent<HTMLFormElement>) => void;
+  };
 }) {
   return (
     <>
-      <AddDialog 
-        open={open === "add"} 
-        onOpenChange={onOpenChange} 
+      <AddDialog
+        open={open === "add"}
+        onOpenChange={onOpenChange}
         onSubmit={submits.add}
       />
-      <EditDialog 
-        open={open === "edit"} 
-        onOpenChange={onOpenChange} 
+      <EditDialog
+        open={open === "edit"}
+        onOpenChange={onOpenChange}
         data={data}
         onSubmit={submits.edit}
       />
-      <DeleteDialog 
-        open={open === "delete"} 
-        onOpenChange={onOpenChange} 
+      <DeleteDialog
+        open={open === "delete"}
+        onOpenChange={onOpenChange}
         data={data}
         onSubmit={submits.delete}
       />
