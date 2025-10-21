@@ -119,8 +119,6 @@ function GeneralRegisterComponent() {
     const salary = formData.get("salary") as string;
     const permissions = formData.getAll("permissions") as string[];
 
-    console.log(dialogData?.id, department, role, salary, permissions);
-
     api
       .post('/companies/team/edit', {
         companyId: company.current?.id,
@@ -180,42 +178,49 @@ function GeneralRegisterComponent() {
                 const departmentData = company.current ? company.current.departments.find(dept => dept.id === roleData?.departmentId) : { name: "Sem departamento" };
   
                 return (
-                  <button
+                  <div
                     key={user.id}
-                    type="button"
                     className={clsx(
                       "relative group dark:bg-input/30 border hover:text-accent-foreground",
-                      "flex flex-col min-h-20 w-full rounded-md px-3 py-3 mb-2 text-start text-sm",
+                      "flex flex-col min-h-20 w-full rounded-md mb-2 text-start text-sm",
                       "transition-all duration-150 cursor-pointer",
                       selectedUser?.id === user.id
                         ? "bg-muted dark:bg-muted"
                         : "hover:bg-muted/50 hover:dark:bg-muted/50",
                     )}
-                    onClick={() => setSelectedUser(user.id === selectedUser?.id ? null : user)}
                   >
-                    <div className="flex items-start gap-2">
-                      <Avatar className="border border-input">
-                        <AvatarImage
-                          src={`${import.meta.env.VITE_CDN_ENDPOINT}/images/users/${user.image}`}
-                          alt={user.name}
-                        />
-                        <AvatarFallback>
-                          {getInitials(user.name)}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <span className="col-start-2 row-span-2 font-medium">
-                          {user.name}
-                        </span>
-                        <p className="text-muted-foreground text-xs">
-                          {roleData?.name && <>{roleData?.name} | </>} Dep. {departmentData?.name}
-                        </p>
+                    <button 
+                      type="button"
+                      className="flex items-start absolute w-full h-full left-0 top-0 px-3 py-3 text-start cursor-pointer"
+                      onClick={() => {
+                        setSelectedUser(user.id === selectedUser?.id ? null : user)
+                        console.log("selectedUser", user.id);
+                      }}
+                    >
+                      <div className="flex items-start gap-3">
+                        <Avatar className="border border-input">
+                          <AvatarImage
+                            src={`${import.meta.env.VITE_CDN_ENDPOINT}/images/users/${user.image}`}
+                            alt={user.name}
+                          />
+                          <AvatarFallback>
+                            {getInitials(user.name)}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <span className="col-start-2 row-span-2 font-medium">
+                            {user.name}
+                          </span>
+                          <p className="text-muted-foreground text-xs">
+                            {roleData?.name && <>{roleData?.name} | </>} Dep. {departmentData?.name}
+                          </p>
 
-                        {user.status === "invited" && (
-                          <p className="text-xs text-[#f7910c]">Convite enviado</p>  
-                        )}
+                          {user.status === "invited" && (
+                            <p className="text-xs text-[#f7910c]">Convite enviado</p>  
+                          )}
+                        </div>
                       </div>
-                    </div>
+                    </button>
   
                     <DropdownMenu>
                       <DropdownMenuTrigger
@@ -240,7 +245,6 @@ function GeneralRegisterComponent() {
                         <DropdownMenuItem
                           onClick={() => {
                             setOpenDialog("edit");
-                            console.log("user", user);
                             setDialogData(user);
                           }}
                         >
@@ -262,7 +266,7 @@ function GeneralRegisterComponent() {
                         )}
                       </DropdownMenuContent>
                     </DropdownMenu>
-                  </button>
+                  </div>
                 )
               }
             })}

@@ -70,6 +70,8 @@ export default function ({
     [key: number]: { id: number; name: string }[];
   }>({});
 
+  console.log(data.salary)
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -125,6 +127,20 @@ export default function ({
 
             <div className="flex gap-8">
               <div className="flex flex-col gap-7 min-w-[16rem]">
+                <FormItem>
+                  <FormLabel htmlFor="name">
+                    Salário
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      id="name"
+                      required
+                      disabled
+                      value={data.name}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
                 <FormField
                   control={form.control}
                   name="department"

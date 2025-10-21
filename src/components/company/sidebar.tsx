@@ -36,10 +36,6 @@ const data = {
           url: "/company/archive/roles",
         },
         {
-          title: "Competências",
-          url: "/company/archive/skills",
-        },
-        {
           title: "Benefícios",
           url: "/company/archive/benefits",
         },

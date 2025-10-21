@@ -28,7 +28,6 @@ import { Route as CompanyCompanyTeamGeneralRegisterRouteImport } from './routes/
 import { Route as CompanyCompanyTeamFeedbacksRouteImport } from './routes/_company/company.team/feedbacks'
 import { Route as CompanyCompanyTeamEvaluationsRouteImport } from './routes/_company/company.team/evaluations'
 import { Route as CompanyCompanyTeamCompetenciesBoardRouteImport } from './routes/_company/company.team/competencies-board'
-import { Route as CompanyCompanyArchiveSkillsRouteImport } from './routes/_company/company.archive/skills'
 import { Route as CompanyCompanyArchiveRolesRouteImport } from './routes/_company/company.archive/roles'
 import { Route as CompanyCompanyArchiveRewardsRouteImport } from './routes/_company/company.archive/rewards'
 import { Route as CompanyCompanyArchivePerformanceRouteImport } from './routes/_company/company.archive/performance'
@@ -141,12 +140,6 @@ const CompanyCompanyTeamCompetenciesBoardRoute =
     path: '/team/competencies-board',
     getParentRoute: () => CompanyCompanyRoute,
   } as any)
-const CompanyCompanyArchiveSkillsRoute =
-  CompanyCompanyArchiveSkillsRouteImport.update({
-    id: '/archive/skills',
-    path: '/archive/skills',
-    getParentRoute: () => CompanyCompanyRoute,
-  } as any)
 const CompanyCompanyArchiveRolesRoute =
   CompanyCompanyArchiveRolesRouteImport.update({
     id: '/archive/roles',
@@ -232,7 +225,6 @@ export interface FileRoutesByFullPath {
   '/company/archive/performance': typeof CompanyCompanyArchivePerformanceRoute
   '/company/archive/rewards': typeof CompanyCompanyArchiveRewardsRoute
   '/company/archive/roles': typeof CompanyCompanyArchiveRolesRoute
-  '/company/archive/skills': typeof CompanyCompanyArchiveSkillsRoute
   '/company/team/competencies-board': typeof CompanyCompanyTeamCompetenciesBoardRoute
   '/company/team/evaluations': typeof CompanyCompanyTeamEvaluationsRoute
   '/company/team/feedbacks': typeof CompanyCompanyTeamFeedbacksRoute
@@ -260,7 +252,6 @@ export interface FileRoutesByTo {
   '/company/archive/performance': typeof CompanyCompanyArchivePerformanceRoute
   '/company/archive/rewards': typeof CompanyCompanyArchiveRewardsRoute
   '/company/archive/roles': typeof CompanyCompanyArchiveRolesRoute
-  '/company/archive/skills': typeof CompanyCompanyArchiveSkillsRoute
   '/company/team/competencies-board': typeof CompanyCompanyTeamCompetenciesBoardRoute
   '/company/team/evaluations': typeof CompanyCompanyTeamEvaluationsRoute
   '/company/team/feedbacks': typeof CompanyCompanyTeamFeedbacksRoute
@@ -293,7 +284,6 @@ export interface FileRoutesById {
   '/_company/company/archive/performance': typeof CompanyCompanyArchivePerformanceRoute
   '/_company/company/archive/rewards': typeof CompanyCompanyArchiveRewardsRoute
   '/_company/company/archive/roles': typeof CompanyCompanyArchiveRolesRoute
-  '/_company/company/archive/skills': typeof CompanyCompanyArchiveSkillsRoute
   '/_company/company/team/competencies-board': typeof CompanyCompanyTeamCompetenciesBoardRoute
   '/_company/company/team/evaluations': typeof CompanyCompanyTeamEvaluationsRoute
   '/_company/company/team/feedbacks': typeof CompanyCompanyTeamFeedbacksRoute
@@ -327,7 +317,6 @@ export interface FileRouteTypes {
     | '/company/archive/performance'
     | '/company/archive/rewards'
     | '/company/archive/roles'
-    | '/company/archive/skills'
     | '/company/team/competencies-board'
     | '/company/team/evaluations'
     | '/company/team/feedbacks'
@@ -355,7 +344,6 @@ export interface FileRouteTypes {
     | '/company/archive/performance'
     | '/company/archive/rewards'
     | '/company/archive/roles'
-    | '/company/archive/skills'
     | '/company/team/competencies-board'
     | '/company/team/evaluations'
     | '/company/team/feedbacks'
@@ -387,7 +375,6 @@ export interface FileRouteTypes {
     | '/_company/company/archive/performance'
     | '/_company/company/archive/rewards'
     | '/_company/company/archive/roles'
-    | '/_company/company/archive/skills'
     | '/_company/company/team/competencies-board'
     | '/_company/company/team/evaluations'
     | '/_company/company/team/feedbacks'
@@ -539,13 +526,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CompanyCompanyTeamCompetenciesBoardRouteImport
       parentRoute: typeof CompanyCompanyRoute
     }
-    '/_company/company/archive/skills': {
-      id: '/_company/company/archive/skills'
-      path: '/archive/skills'
-      fullPath: '/company/archive/skills'
-      preLoaderRoute: typeof CompanyCompanyArchiveSkillsRouteImport
-      parentRoute: typeof CompanyCompanyRoute
-    }
     '/_company/company/archive/roles': {
       id: '/_company/company/archive/roles'
       path: '/archive/roles'
@@ -666,7 +646,6 @@ interface CompanyCompanyRouteChildren {
   CompanyCompanyArchivePerformanceRoute: typeof CompanyCompanyArchivePerformanceRoute
   CompanyCompanyArchiveRewardsRoute: typeof CompanyCompanyArchiveRewardsRoute
   CompanyCompanyArchiveRolesRoute: typeof CompanyCompanyArchiveRolesRoute
-  CompanyCompanyArchiveSkillsRoute: typeof CompanyCompanyArchiveSkillsRoute
   CompanyCompanyTeamCompetenciesBoardRoute: typeof CompanyCompanyTeamCompetenciesBoardRoute
   CompanyCompanyTeamEvaluationsRoute: typeof CompanyCompanyTeamEvaluationsRoute
   CompanyCompanyTeamFeedbacksRoute: typeof CompanyCompanyTeamFeedbacksRoute
@@ -686,7 +665,6 @@ const CompanyCompanyRouteChildren: CompanyCompanyRouteChildren = {
   CompanyCompanyArchivePerformanceRoute: CompanyCompanyArchivePerformanceRoute,
   CompanyCompanyArchiveRewardsRoute: CompanyCompanyArchiveRewardsRoute,
   CompanyCompanyArchiveRolesRoute: CompanyCompanyArchiveRolesRoute,
-  CompanyCompanyArchiveSkillsRoute: CompanyCompanyArchiveSkillsRoute,
   CompanyCompanyTeamCompetenciesBoardRoute:
     CompanyCompanyTeamCompetenciesBoardRoute,
   CompanyCompanyTeamEvaluationsRoute: CompanyCompanyTeamEvaluationsRoute,

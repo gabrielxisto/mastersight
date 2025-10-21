@@ -42,7 +42,19 @@ export function TeamHeader({
           </div>
           <div className="flex flex-col gap-2">
             <div className="flex flex-col">
-              <h1 className="text-2xl font-bold">{data.name}</h1>
+              <div className="flex items-center gap-3">
+                <h1 className="text-2xl font-bold">{data.name}</h1>
+                {data.admin && <p 
+                  style={{ 
+                    backgroundColor: `${company.current?.color}26` || "#4F46E5",
+                    borderColor: company.current?.color || "#4F46E5",
+                    color: company.current?.color || "#000000",
+                  }}
+                  className="px-2 py-0.5 rounded-md border border-1 text-xs"
+                >
+                  SMA
+                </p>}
+              </div>
               <p className="text-muted-foreground">
                 {roleData?.name && <>{roleData?.name} | </>} Dep.{" "}
                 {departmentData?.name}

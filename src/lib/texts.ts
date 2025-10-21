@@ -62,10 +62,6 @@ export const titles: { path: string; title: string[] }[] = [
     title: ["Cargos", "Arquivo"],
   },
   {
-    path: "/company/archive/skills",
-    title: ["Competências", "Arquivo"],
-  },
-  {
     path: "/company/archive/benefits",
     title: ["Benefícios", "Arquivo"],
   },

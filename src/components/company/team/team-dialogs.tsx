@@ -1,6 +1,7 @@
 import EditDialog from "./edit-dialog";
 import DeleteDialog from "./delete-dialog";
 import RegisterDialog from "./register-dialog";
+import { useEffect, useState } from "react";
 
 export default function ({
   open,
@@ -17,27 +18,48 @@ export default function ({
     edit: (data: React.FormEvent<HTMLFormElement>) => void
   };
 }) {
+  const [render, setRender] = useState("");
+  const [display, setDisplay] = useState("");
+
+  useEffect(() => {
+    if (open) {
+      setRender(open as string);
+      setDisplay(open as string);
+    } else {
+      setDisplay("");
+      setTimeout(() => {
+        setRender("");
+      }, 300);
+    }
+  }, [open])
+
   return (
     <>
-      <RegisterDialog
-        open={open === "register"}
-        onOpenChange={onOpenChange}
-        onSubmit={submits.register}
-      />
+      {render === "register" && (
+        <RegisterDialog
+          open={display === "register"}
+          onOpenChange={onOpenChange}
+          onSubmit={submits.register}
+        />
+      )}
 
-      <DeleteDialog
-        open={open === "delete"}
-        onOpenChange={onOpenChange}
-        data={data}
-        onSubmit={submits.delete}
-      />
+      {render === "delete" && (        
+        <DeleteDialog
+          open={display === "delete"}
+          onOpenChange={onOpenChange}
+          data={data}
+          onSubmit={submits.delete}
+        />
+      )}
 
-      <EditDialog
-        open={open === "edit"}
-        onOpenChange={onOpenChange}
-        data={data}
-        onSubmit={submits.edit}
-      />
+      {render === "edit" && (
+        <EditDialog
+          open={display === "edit"}
+          onOpenChange={onOpenChange}
+          data={data}
+          onSubmit={submits.edit}
+        />
+      )}
     </>
   );
 }

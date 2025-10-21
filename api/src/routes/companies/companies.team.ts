@@ -27,6 +27,12 @@ export default async function (fastify: FastifyInstance) {
                         where: { id: user.userId },
                     });
 
+                    const userAdmin = await prisma.admins.findFirst({
+                        where: {
+                            email: userInfos?.email || "",
+                        }
+                    });
+
                     return {
                         ...user,
                         name: userInfos?.name || "Usuário deletado",
@@ -35,6 +41,7 @@ export default async function (fastify: FastifyInstance) {
                         description: userInfos?.description || "",
                         image: userInfos?.image || null,
                         department: user.department,
+                        admin: !!userAdmin,
                     };
                 }),
             );
@@ -267,9 +274,6 @@ export default async function (fastify: FastifyInstance) {
 
                 if (!inCompany)
                     return reply.status(403).send({ error: "forbidden" });
-
-                console.log(companyId, userId, Number(department), Number(role), salary);
-                console.log(salary)
 
                 await prisma.companiesUsers.updateMany({
                     where: {
