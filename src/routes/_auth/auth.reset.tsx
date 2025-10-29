@@ -5,7 +5,7 @@ import {
   useSearch,
   Link,
 } from "@tanstack/react-router";
-import { Route as RootRoute } from "./auth.index";
+import { Route as RootRoute } from "./auth";
 import api from "@/services/api.service";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -89,7 +89,6 @@ function ResetPassword() {
             id="password"
             name="password"
             type="password"
-            className="opacity-50"
             onChange={() => setError(false)}
           />
         </div>
@@ -102,7 +101,6 @@ function ResetPassword() {
             id="confirmPassword"
             name="confirmPassword"
             type="password"
-            className="opacity-50"
             onChange={() => setError(false)}
           />
         </div>

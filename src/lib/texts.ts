@@ -86,10 +86,6 @@ export const titles: { path: string; title: string[] }[] = [
     title: ["Cadastro Geral", "Equipe"],
   },
   {
-    path: "/company/team/competencies-board",
-    title: ["Mural de Competências", "Equipe"],
-  },
-  {
     path: "/company/team/feedbacks",
     title: ["Feedbacks", "Equipe"],
   },

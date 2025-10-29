@@ -68,7 +68,7 @@ function DashboardComponent() {
 
             return (
               <Card key={company.id} className="@container/card">
-                <CardHeader>
+                <CardHeader className="flex-col gap-1">
                   <div className="flex justify-between w-full items-center">
                     <CardDescription>Empresa</CardDescription>
                     <CardAction>

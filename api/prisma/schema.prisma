@@ -47,6 +47,7 @@ model CompaniesUsers {
   department  Int
   salary      Float     @default(0)
   permissions Json
+  competences Json      @default("[]")
   status      String    @default("pending")
   lastAccess  DateTime?
   createdAt   DateTime  @default(now())

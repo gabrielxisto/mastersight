@@ -1,5 +1,7 @@
-import { Shield, Key, Trash2 } from "lucide-react";
+import { useState } from "react";
+import { Shield, Key, MoreHorizontal } from "lucide-react";
 
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -10,12 +12,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { useCompanyStore } from "@/stores";
+import { ScrollArea } from "@radix-ui/react-scroll-area";
+import clsx from "clsx";
+import Competences from "./competences";
 
 export function TeamContent({ data }: { data: any }) {
   const company = useCompanyStore();
 
   return (
-    <Tabs defaultValue="infos" className="space-y-5">
+    <Tabs defaultValue="infos" className="space-y-5 pb-5">
       <TabsList className="grid w-full grid-cols-4">
         <TabsTrigger value="infos">Informações</TabsTrigger>
         <TabsTrigger value="competences">Competências</TabsTrigger>
@@ -23,9 +28,9 @@ export function TeamContent({ data }: { data: any }) {
         <TabsTrigger value="notifications">Notifications</TabsTrigger>
       </TabsList>
 
-      <TabsContent value="infos" className="space-y-5">
-        <Card>
-          <CardHeader>
+      <TabsContent value="infos" className="max-h-[28.4rem] space-y-5 overflow-y-scroll">
+        <Card className="min-h-[28.4rem] mb-2">
+          <CardHeader className="flex-col gap-1">
             <CardTitle>Informações</CardTitle>
             <CardDescription>Visualize as principais informações do usuário.</CardDescription>
           </CardHeader>
@@ -57,8 +62,8 @@ export function TeamContent({ data }: { data: any }) {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="company">Cargo</Label>
-                <Input 
-                  disabled 
+                <Input
+                  disabled
                   value={company.current ? company.current?.roles.find(role => role.id === data?.role)?.name : ""}
                   className="disabled:opacity-100"
                 />
@@ -79,72 +84,7 @@ export function TeamContent({ data }: { data: any }) {
         </Card>
       </TabsContent>
 
-      <TabsContent value="account" className="space-y-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Competências</CardTitle>
-            <CardDescription>Abaixo está todas as competências listadas do usuário.</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="flex items-center justify-between">
-              <div className="space-y-1">
-                <Label className="text-base">Account Status</Label>
-                <p className="text-muted-foreground text-sm">Your account is currently active</p>
-              </div>
-              <Badge variant="outline" className="border-green-200 bg-green-50 text-green-700">
-                Active
-              </Badge>
-            </div>
-            <Separator />
-            <div className="flex items-center justify-between">
-              <div className="space-y-1">
-                <Label className="text-base">Subscription Plan</Label>
-                <p className="text-muted-foreground text-sm">Pro Plan - $29/month</p>
-              </div>
-              <Button variant="outline">Manage Subscription</Button>
-            </div>
-            <Separator />
-            <div className="flex items-center justify-between">
-              <div className="space-y-1">
-                <Label className="text-base">Account Visibility</Label>
-                <p className="text-muted-foreground text-sm">
-                  Make your profile visible to other users
-                </p>
-              </div>
-              <Switch defaultChecked />
-            </div>
-            <Separator />
-            <div className="flex items-center justify-between">
-              <div className="space-y-1">
-                <Label className="text-base">Data Export</Label>
-                <p className="text-muted-foreground text-sm">Download a copy of your data</p>
-              </div>
-              <Button variant="outline">Export Data</Button>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="border-destructive/50">
-          <CardHeader>
-            <CardTitle className="text-destructive">Danger Zone</CardTitle>
-            <CardDescription>Irreversible and destructive actions</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center justify-between">
-              <div className="space-y-1">
-                <Label className="text-base">Delete Account</Label>
-                <p className="text-muted-foreground text-sm">
-                  Permanently delete your account and all data
-                </p>
-              </div>
-              <Button variant="destructive">
-                <Trash2 className="mr-2 h-4 w-4" />
-                Delete Account
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </TabsContent>
+      <Competences data={data} />
 
       {/* Security Settings */}
       <TabsContent value="security" className="space-y-6">

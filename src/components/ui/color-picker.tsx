@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import type React from "react";
 import { useCallback, useMemo } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";

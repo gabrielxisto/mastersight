@@ -278,12 +278,12 @@ export default async function (fastify: FastifyInstance) {
                 await prisma.companiesUsers.updateMany({
                     where: {
                         companyId,
-                        userId: Number(userId),
+                        id: userId,
                     },
                     data: {
                         department: Number(department),
                         role: Number(role),
-                        salary: salary ? parseFloat(salary.replace(/\D/g, '')) / 100 : 0,
+                        salary: salary ? Number.parseFloat(salary.replace(/\D/g, '')) / 100 : 0,
                         permissions,
                     },
                 });

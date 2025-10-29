@@ -37,7 +37,7 @@ function SettingsComponent() {
         <aside className="top-0 lg:sticky lg:w-1/5">
           <SidebarNav items={sidebarNavItems} />
         </aside>
-        <div className="flex w-full overflow-y-hidden p-1">
+        <div className="flex w-full overflow-y-scroll max-h-[32rem] p-1">
           <Outlet />
         </div>
       </div>

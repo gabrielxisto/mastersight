@@ -90,7 +90,7 @@ function AuthComponent({ className, ...props }: React.ComponentProps<"form">) {
               Senha
             </Label>
             <Link
-              to="/auth/forgot-password"
+              to="/auth/forgot"
               className="ml-auto text-sm underline-offset-4 hover:underline"
             >
               Esqueceu sua senha?

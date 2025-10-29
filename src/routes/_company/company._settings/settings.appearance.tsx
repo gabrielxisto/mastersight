@@ -145,7 +145,7 @@ function AppearanceComponent() {
                       <div
                         style={{ backgroundColor: color }}
                         className="absolute mt-5.5 size-9 rounded-l-md border border-white/20 cursor-pointer"
-                      ></div>
+                      />
                     </>
                   </FormControl>
                   <FormDescription>
@@ -187,7 +187,7 @@ function AppearanceComponent() {
                           showEditImage && "opacity-100",
                         )}
                       >
-                        <Pencil className="text-foreground" />
+                        <Pencil color="#FFFFFF" />
                       </div>
                       <Image className="text-muted-foreground" />
                       <img

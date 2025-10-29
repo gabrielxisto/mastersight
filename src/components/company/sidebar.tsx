@@ -67,10 +67,6 @@ const data = {
           url: "/company/team/general-register",
         },
         {
-          title: "Mural de Competências",
-          url: "/company/team/competencies-board",
-        },
-        {
           title: "Feedbacks",
           url: "/company/team/feedbacks",
         },

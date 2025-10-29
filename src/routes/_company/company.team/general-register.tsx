@@ -130,6 +130,7 @@ function GeneralRegisterComponent() {
       }).then(() => {
         setOpenDialog(false);
         fetchUsers();
+        setSelectedUser(null);
         toast.success(messages.success["user-edited"]);
       })
   }
@@ -276,9 +277,9 @@ function GeneralRegisterComponent() {
 
       <hr className="h-full w-[0.1rem] bg-muted" />
 
-      <section className="relative w-full max-h-[43.5rem] overflow-y-scroll">
+      <section className="relative w-full max-h-[43.5rem] overflow-y-hidden">
         {selectedUser ? (
-          <div className="w-full space-y-5">            
+          <div className="w-full space-y-5 scrollbar-hidden">            
             <TeamHeader 
               data={selectedUser}
               openDelete={() => {
@@ -286,7 +287,6 @@ function GeneralRegisterComponent() {
                 setDialogData({ id: selectedUser.id, name: selectedUser.name });
               }} 
               openEdit={() => {
-                console.log("selectedUser", selectedUser);
                 setDialogData(selectedUser);
                 setOpenDialog("edit");
               }}

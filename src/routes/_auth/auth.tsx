@@ -21,6 +21,7 @@ function AuthComponent() {
   const { token } = useSearch({ from: Route.id });
 
   useEffect(() => {
+    console.log(token)
     if (token) {
       api
         .get(`/auth/validate-token?token=${token}`)

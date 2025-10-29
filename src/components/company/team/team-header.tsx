@@ -65,13 +65,17 @@ export function TeamHeader({
                 <Mail className="size-4" />
                 {data.email}
               </div>
-              <div className="flex items-center gap-1">
-                <Calendar className="size-4" />
-                Entrou em{" "}{format(new Date(data.createdAt), "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}
-              </div>
+              {data.status === "invited" ? (
+                <p className="text-[#f7910c]">Convite enviado</p>
+              ) : (
+                <div className="flex items-center gap-1">
+                  <Calendar className="size-4" />
+                  Entrou em{" "}{format(new Date(data.createdAt), "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}
+                </div>
+              )}
             </div>
           </div>
-          <div className="flex flex-col gap-3 ml-auto">
+          <div className="absolute right-6 flex w-32 flex-col gap-3">
             <Button 
               onClick={openEdit}
               variant="default"

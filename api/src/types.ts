@@ -24,6 +24,11 @@ export type UserData = {
     role: number;
     department: number;
     permissions: {[key: string]: string[]};
+    competences: {
+        id: number;
+        name: string;
+        description: string;
+    }[];
     createdAt: Date;
     lastAccess: Date | null;
 }
