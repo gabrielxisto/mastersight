@@ -20,6 +20,7 @@ export type Company = {
     departments: Department[];
     roles: Role[];
     lastAccess?: number;
+    permissions?: Permissions;
 };
 
 export type Department = {

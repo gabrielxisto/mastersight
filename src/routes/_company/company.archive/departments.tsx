@@ -125,15 +125,15 @@ function DepartmentsComponent() {
                 Copiar ID
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem
+              {company.current.permissions?.includes("editDepartments") && <DropdownMenuItem
                 onClick={() => {
                   setOpenDialog("edit");
                   setDialogData(department);
                 }}
               >
                 Editar
-              </DropdownMenuItem>
-              <DropdownMenuItem
+              </DropdownMenuItem>}
+              {company.current.permissions?.includes("deleteDepartments") && <DropdownMenuItem
                 onClick={() => {
                   setOpenDialog("delete");
                   setDialogData(department);
@@ -141,7 +141,7 @@ function DepartmentsComponent() {
                 className="text-red-500"
               >
                 Deletar
-              </DropdownMenuItem>
+              </DropdownMenuItem>}
             </DropdownMenuContent>
           </DropdownMenu>
         );
@@ -269,12 +269,14 @@ function DepartmentsComponent() {
             className="max-w-sm"
           />
           <div className="flex gap-2">
-            <Button
-              onClick={() => setOpenDialog("add")}
-              className="ml-auto cursor-pointer"
-            >
-              Criar <Plus />
-            </Button>
+            {company.current.permissions?.includes("createDepartments") && (
+              <Button
+                onClick={() => setOpenDialog("add")}
+                className="ml-auto cursor-pointer"
+              >
+                Criar <Plus />
+              </Button>
+            )}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" className="ml-auto cursor-pointer">

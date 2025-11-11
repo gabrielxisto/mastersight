@@ -1,40 +1,53 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MoreHorizontal } from "lucide-react";
-import { useCompanyStore } from "@/stores";
+import { useCompanyStore, useUserStore } from "@/stores";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { TabsContent } from "@/components/ui/tabs";
 import clsx from "clsx";
-import CompetencesDialogs from "./competences-dialogs";
+import CompetencesDialogs from "./feedbacks-dialogs";
 import api from "@/services/api.service";
 
-export default function Competences({ data }: { data: any }) {
+export default function Feedbacks({ data }: { data: any }) {
   const company = useCompanyStore();
+  const user = useUserStore();
+  const [users, setUsers] = useState<any>([]);
   const [dialogOpen, setDialogOpen] = useState<"add" | "view" | "delete" | false>(false);
   const [dialogData, setDialogData] = useState<any>(null);
 
-  const addCompetence = (e: React.FormEvent<HTMLFormElement>) => {
+  useEffect(() => {
+    if (company.current) {
+      api.get(`/companies/team?companyId=${company.current?.id}`).then((response) => {
+        setUsers(response.data.team);
+      });
+    }
+  }, [])
+
+  const addFeedback = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
-    const title = formData.get("title") as string;
-    const description = formData.get("description") as string;
-    const documents = formData.getAll("documents") as string[];
+    const score = formData.get("score") as string;
+    const content = formData.get("content") as string;
 
-    api.post("/companies/competences/add", { 
+    const creatorId = company.current?.users.find((u: any) => u.userId === user.current?.id)?.id;
+
+    api.post("/companies/feedbacks/add", { 
       userId: data.id,
+      creatorId,
       companyId: company.current?.id,
-      title,
-      description,
-      documents
+      score,
+      content
     }).then(() => {
       data.competences.push({
-        id: Date.now(),
-        title,
-        description,
-        documents
+        userId: data.id,
+        creatorId,
+        companyId: company.current?.id,
+        score,
+        content,
+        createdAt: new Date().toISOString()
       });
       setDialogOpen(false);
     }).catch(() => {
@@ -42,68 +55,22 @@ export default function Competences({ data }: { data: any }) {
     });
   }
 
-  const deleteCompetence = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); 
-
-    api.post("/companies/competences/delete", { 
-      userId: data.id,
-      companyId: company.current?.id,
-      competenceIndex: String(dialogData?.index)
-    }).then(() => {
-      const updatedCompetences = data.competences.filter((_: any, index: number) => index !== dialogData.index);
-      data.competences = updatedCompetences;
-      setDialogOpen(false);
-    }).catch(() => {
-      setDialogOpen(false);
-    })
-  }
-
-  const updateCompetence = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    const formData = new FormData(e.currentTarget);
-    const title = formData.get("title") as string;
-    const description = formData.get("description") as string;
-    const documents = formData.getAll("documents") as string[];
-    
-    api.post("/companies/competences/update", { 
-      userId: data.id,
-      companyId: company.current?.id,
-      competenceIndex: String(dialogData?.index),
-      title,
-      description,
-      documents
-    }).then(() => {
-      const updatedCompetences = [...data.competences];
-      updatedCompetences[dialogData.index] = {
-        id: dialogData.id,
-        title,
-        description,
-        documents
-      };
-      data.competences = updatedCompetences;
-      setDialogOpen(false);
-    }).catch(() => {
-      setDialogOpen(false);
-    });
-  }
-
   return (
-    <TabsContent value="competences" className="max-h-[23.4rem] overflow-y-scroll space-y-6 scrollbar-hidden">
+    <TabsContent value="feedbacks" className="max-h-[23.4rem] overflow-y-scroll space-y-6 scrollbar-hidden">
       <Card className="min-h-[28.4rem] mb-2">
         <CardHeader className="justify-between">
           <div className="flex flex-col gap-1">
-            <CardTitle>Competências</CardTitle>
-            <CardDescription>Abaixo está todas as competências listadas do usuário.</CardDescription>
+            <CardTitle>Feedbacks</CardTitle>
+            <CardDescription>Abaixo está todos os feedbacks listados do usuário.</CardDescription>
           </div>
 
           <Button
             onClick={() => {
               setDialogOpen("add");
               setDialogData({
-                name: "",
-                description: "",
-                documents: []
+                user: data.email || "",
+                content: "",
+                score: "0"
               });
             }}
             variant="default"
@@ -113,10 +80,10 @@ export default function Competences({ data }: { data: any }) {
         </CardHeader>
         <CardContent className="space-y-6">
           <ScrollArea className="-mx-3 h-full overflow-y-scroll p-3 scrollbar-hidden">
-            {data.competences.map((competence: any, index) => {    
+            {data.feedbacks.map((feedback: any, index) => {    
               return (
                 <div
-                  key={competence.id}
+                  key={feedback.id}
                   className={clsx(
                     "relative group dark:bg-input/30 border hover:text-accent-foreground",
                     "flex flex-col min-h-20 w-full rounded-md mb-2 text-start text-sm",
@@ -129,17 +96,17 @@ export default function Competences({ data }: { data: any }) {
                     onClick={() => {
                       setDialogOpen("view");
                       setDialogData({
-                        ...competence,
+                        ...feedback,
                         index
                       });
                     }}
                   >
                     <div className="flex flex-col items-start">
                       <span className="col-start-2 row-span-2 font-medium">
-                        {competence.title}
+                        Feedback #{feedback.id} | Autor: {users.find((u: any) => u.userId === feedback.creatorId)?.name || "Usuário deletado"}
                       </span>
                       <p className="text-muted-foreground text-xs w-[30rem]">
-                        {competence.description}
+                        {feedback.content}
                       </p>
                     </div>
                   </button>
@@ -163,7 +130,7 @@ export default function Competences({ data }: { data: any }) {
                         onClick={() => {
                           setDialogOpen("view");
                           setDialogData({
-                            ...competence,
+                            ...feedback,
                             index
                           });
                         }}
@@ -175,7 +142,7 @@ export default function Competences({ data }: { data: any }) {
                         onClick={() => {
                           setDialogOpen("delete");
                           setDialogData({
-                            ...competence,
+                            ...feedback,
                             index
                           });
                         }}
@@ -197,9 +164,7 @@ export default function Competences({ data }: { data: any }) {
         onOpenChange={(open) => setDialogOpen(open ? (typeof open === "string" ? open : dialogOpen) : false)}
         data={dialogData}
         submits={{
-          add: addCompetence,
-          delete: deleteCompetence,
-          view: updateCompetence
+          add: addFeedback,
         }}
       />
     </TabsContent>

@@ -22,6 +22,10 @@ import { useCompanyStore } from "@/stores";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Textarea } from "@/components/ui/textarea";
+import { cn } from "@/lib/utils";
+import { getDocument, GlobalWorkerOptions } from "pdfjs-dist";
+import workerUrl from "pdfjs-dist/build/pdf.worker.min.mjs?url";
+import { useEffect, useRef } from "react";
 
 const FormSchema = z.object({
   title: z.string().min(1),
@@ -50,6 +54,68 @@ export default function ({
       documents: [],
     },
   });
+
+  const PdfThumbnail = ({
+    url,
+    className,
+    maxWidth = 60,
+    maxHeight = 60,
+  }: {
+    url: string;
+    className?: string;
+    maxWidth?: number;
+    maxHeight?: number;
+  }) => {
+    const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+    useEffect(() => {
+      let isCancelled = false;
+
+      GlobalWorkerOptions.workerSrc = workerUrl;
+
+      const render = async () => {
+        try {
+          const loadingTask = getDocument({ url });
+          const pdf = await loadingTask.promise;
+          if (isCancelled) return;
+          const page = await pdf.getPage(1);
+          const viewport = page.getViewport({ scale: 1 });
+
+          const scaleToFit = Math.min(
+            maxWidth / viewport.width,
+            maxHeight / viewport.height,
+          );
+          const dpr = Math.min(window.devicePixelRatio || 1, 2); // cap DPR to avoid huge canvases
+          const scaledViewport = page.getViewport({ scale: scaleToFit * dpr });
+
+          const canvas = canvasRef.current;
+          if (!canvas) return;
+          const ctx = canvas.getContext("2d");
+          if (!ctx) return;
+
+          canvas.width = Math.ceil(scaledViewport.width);
+          canvas.height = Math.ceil(scaledViewport.height);
+          canvas.style.width = `${Math.round(scaledViewport.width / dpr)}px`;
+          canvas.style.height = `${Math.round(scaledViewport.height / dpr)}px`;
+
+          await page.render({
+            canvasContext: ctx,
+            viewport: scaledViewport,
+            canvas,
+          }).promise;
+        } catch(err) {
+          console.log("Error rendering PDF thumbnail:", err);
+        }
+      };
+
+      render();
+      return () => {
+        isCancelled = true;
+      };
+    }, [url, maxWidth, maxHeight]);
+
+    return <canvas ref={canvasRef} className={className} />;
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -107,35 +173,50 @@ export default function ({
               </div>
 
               <div className="flex">
-                  <div className="flex flex-col gap-2">
-                    <span className="text-sm font-medium">Documentos anexados:</span>
-                    <div className="flex flex-col gap-1">
-                      {form
-                        .getValues("documents")
-                        .map((file, index) => (
-                          <div
-                            key={file}
-                            className="flex items-center gap-2"
-                          >
-                            <span className="text-sm">{file.title}</span>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="h-6 w-6 p-0"
-                              onClick={() => {
-                                const updatedFiles =
-                                  form.getValues("documents").filter(
-                                    (_, i) => i !== index,
-                                  );
-                                form.setValue("documents", updatedFiles);
-                              }}
-                            >
-
-                            </Button>
-                          </div>
-                        ))}
-                    </div>
+                <div className="flex flex-col gap-2">
+                  <span className="text-sm font-medium">Documentos anexados:</span>
+                  <div className="grid grid-cols-5 gap-x-2">
+                    {Array.from({
+                      length:
+                        form.getValues("documents").length < 5
+                          ? 5
+                          : form.getValues("documents").length,
+                    }).map((_, index) => {
+                      const file = form.getValues("documents")[index];
+                      return (
+                        <div
+                          key={file || `slot-${index}`}
+                          className={cn(
+                            "relative flex items-center justify-center size-15 border rounded-md cursor-pointer overflow-hidden",
+                            !file && "bg-muted",
+                          )}
+                        >
+                          <input
+                            id={`doc-file-${index}`}
+                            type="file"
+                            accept=".pdf,image/*"
+                            className="size-full opacity-0 cursor-pointer absolute left-0 top-0"
+                          />
+                          {file &&
+                            (file.includes(".pdf") ? (
+                              <PdfThumbnail
+                                url={`${import.meta.env.VITE_CDN_ENDPOINT}/docs/competences/${file}`}
+                                className="size-full object-cover rounded-md"
+                                maxWidth={60}
+                                maxHeight={60}
+                              />
+                            ) : (
+                              <img
+                                src={`${import.meta.env.VITE_CDN_ENDPOINT}/docs/competences/${file}`}
+                                alt={file}
+                                className="size-full object-cover rounded-md"
+                              />
+                            ))}
+                        </div>
+                      );
+                    })}
                   </div>
+                </div>
               </div>
             </div>
             <DialogFooter>

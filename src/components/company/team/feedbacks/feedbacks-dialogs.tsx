@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import ViewDialog from "./view-dialog";
-import DeleteDialog from "./delete-dialog";
 import AddDialog from "./add-dialog";
 
 export default function ({
@@ -14,8 +13,6 @@ export default function ({
   data: any;
   submits: {
     add: (data: React.FormEvent<HTMLFormElement>) => void;
-    delete: (data: React.FormEvent<HTMLFormElement>) => void;
-    view: (data: React.FormEvent<HTMLFormElement>) => void;
   };
 }) {
   const [render, setRender] = useState("");
@@ -37,18 +34,10 @@ export default function ({
     <>
       {render === "add" && (
         <AddDialog
+          data={data}
           open={display === "add"}
           onOpenChange={onOpenChange}
           onSubmit={submits.add}
-        />
-      )}
-
-      {render === "delete" && (
-        <DeleteDialog
-          open={display === "delete"}
-          onOpenChange={onOpenChange}
-          data={data}
-          onSubmit={submits.delete}
         />
       )}
 
@@ -57,7 +46,6 @@ export default function ({
           open={display === "view"}
           onOpenChange={onOpenChange}
           data={data}
-          onSubmit={submits.view}
         />
       )}
     </>

@@ -9,6 +9,8 @@ import crypto from "node:crypto";
 import companiesDepartments from "./companies.departments";
 import companiesRoles from "./companies.roles";
 import companiesTeam from "./companies.team";
+import companiesCompetences from "./companies.competences";
+import companiesFeedbacks from "./companies.feedbacks";
 
 export default async function (fastify: FastifyInstance) {
   fastify.get("/", async (req: FastifyRequest, reply: FastifyReply) => {
@@ -114,4 +116,6 @@ export default async function (fastify: FastifyInstance) {
   companiesDepartments(fastify);
   companiesRoles(fastify);
   companiesTeam(fastify);
+  companiesCompetences(fastify);
+  companiesFeedbacks(fastify);
 }

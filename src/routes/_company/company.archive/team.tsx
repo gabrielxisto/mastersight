@@ -23,7 +23,7 @@ import { getInitials } from "@/lib/utils";
 import { TeamHeader } from "@/components/company/team/team-header";
 import { TeamContent } from "@/components/company/team/team-content";
 
-export const Route = createFileRoute("/_company/company/team/general-register")(
+export const Route = createFileRoute("/_company/company/archive/team")(
   {
     component: GeneralRegisterComponent,
   },
@@ -53,16 +53,13 @@ function GeneralRegisterComponent() {
 
     const formData = new FormData(event.currentTarget);
 
-    console.log(formData)
-
     const name = formData.get("name") as string;
     const email = formData.get("email") as string;
     const role = formData.get("role") as string;
     const department = formData.get("department") as string;
     const salary = formData.get("salary") as string;
+    const notify = formData.get("notify") as string;
     const permissions = formData.getAll("permissions") as string[];
-
-    console.log(salary)
 
     api
       .post("/companies/team/add", {
@@ -71,6 +68,8 @@ function GeneralRegisterComponent() {
         name,
         department,
         role,
+        salary,
+        notify,
         permissions,
       })
       .then((response) => {
@@ -142,7 +141,7 @@ function GeneralRegisterComponent() {
 
   return (
     <main className="flex gap-8 px-10 py-5 h-full">
-      <section className="w-[35.5rem]">
+      <section className="w-[35.5rem] max-h-[43.5rem]">
         <header className="w-full">
           <div>
             <h1 className="text-2xl font-bold tracking-tight">Cadastro</h1>
@@ -195,7 +194,6 @@ function GeneralRegisterComponent() {
                       className="flex items-start absolute w-full h-full left-0 top-0 px-3 py-3 text-start cursor-pointer"
                       onClick={() => {
                         setSelectedUser(user.id === selectedUser?.id ? null : user)
-                        console.log("selectedUser", user.id);
                       }}
                     >
                       <div className="flex items-start gap-3">
@@ -275,7 +273,7 @@ function GeneralRegisterComponent() {
         </div>
       </section>
 
-      <hr className="h-full w-[0.1rem] bg-muted" />
+      <hr className="h-[38.5rem] w-[0.1rem] bg-muted" />
 
       <section className="relative w-full max-h-[43.5rem] overflow-y-hidden">
         {selectedUser ? (

@@ -37,6 +37,7 @@ import {
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import api from "@/services/api.service";
+import { Switch } from "@/components/ui/switch";
 
 const FormSchema = z.object({
   email: z.string().email(),
@@ -45,6 +46,7 @@ const FormSchema = z.object({
   role: z.string(),
   salary: z.string(),
   type: z.enum(["employee", "manager"]),
+  notify: z.string(),
   permissions: z.array(z.string())
 });
 
@@ -77,6 +79,7 @@ export default function ({
       role: "",
       salary: "R$ 0,00",
       type: "employee",
+      notify: "false",
       permissions: defaultPermissions.employee,
     },
   });
@@ -109,6 +112,10 @@ export default function ({
     const permissionsDefault = defaultPermissions[form.getValues("type")];
     form.setValue("permissions", permissionsDefault || []);
   }, [form.watch("type")]);
+
+  useEffect(() => {
+    const notify = form.getValues("notify");
+  }, [form.watch("notify")]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -257,7 +264,6 @@ export default function ({
                           value={field.value}
                           onChange={(e) => {
                             let value = e.target.value.replace(/\D/g, "");
-                            console.log(value)
                             if (value.length === 0) value = "0";
                             value = value.padStart(3, "0");
                             const intValue = parseInt(value, 10);
@@ -307,7 +313,7 @@ export default function ({
                       <FormMessage />
                     </FormItem>
                   )}
-                />
+                />           
               </div>
 
               <div className="grid grid-rows-2 grid-flow-col gap-x-7 items-start">
@@ -357,11 +363,33 @@ export default function ({
                 />
               </div>
             </div>
-            <DialogFooter>
-              <DialogClose asChild>
-                <Button variant="outline">Cancelar</Button>
-              </DialogClose>
-              <Button type="submit">Criar</Button>
+            <DialogFooter className="flex w-full justify-between sm:justify-between">
+              <FormField
+                control={form.control}
+                name="notify"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel htmlFor="register-notify">Notificar Usuário</FormLabel>
+                    <FormControl>
+                      <Switch
+                        checked={field.value === "true"}
+                        onCheckedChange={(value) => field.onChange(value ? "true" : "false")}
+                        {...field}
+                      >
+                        
+                      </Switch>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />   
+
+              <div className="flex gap-2">
+                <DialogClose asChild>
+                  <Button variant="outline">Cancelar</Button>
+                </DialogClose>
+                <Button type="submit">Criar</Button>
+              </div>
             </DialogFooter>
           </form>
         </Form>

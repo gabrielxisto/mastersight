@@ -13,7 +13,7 @@ export default function({
 }: { 
     open: boolean, 
     onOpenChange: (open: boolean) => void, 
-    data: { id: number; name: string } | null,
+    data: { title: string } | null,
     onSubmit: (data: React.FormEvent<HTMLFormElement>) => void 
 }) {
   const [available, setAvailable] = useState<boolean>(false);
@@ -21,7 +21,7 @@ export default function({
   const checkAvailable = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     
-    if (data && value === data.id.toString()) {
+    if (data && value === data.title.toString()) {
       setAvailable(true);
     } else {
       setAvailable(false);

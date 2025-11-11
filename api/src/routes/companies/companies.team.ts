@@ -1,5 +1,4 @@
 import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import type { UserData } from "@/types";
 
 import { isAuthenticated, isInCompany } from "@/lib/session";
 
@@ -33,6 +32,13 @@ export default async function (fastify: FastifyInstance) {
                         }
                     });
 
+                    const userFeedbacks = await prisma.companiesFeedbacks.findMany({
+                        where: {
+                            companyId: Number(companyId),
+                            userId: user.id,
+                        },
+                    });
+
                     return {
                         ...user,
                         name: userInfos?.name || "Usuário deletado",
@@ -42,6 +48,7 @@ export default async function (fastify: FastifyInstance) {
                         image: userInfos?.image || null,
                         department: user.department,
                         admin: !!userAdmin,
+                        feedbacks: userFeedbacks,
                     };
                 }),
             );
@@ -63,6 +70,8 @@ export default async function (fastify: FastifyInstance) {
                     name,
                     department,
                     role,
+                    notify,
+                    salary,
                     permissions,
                 } = req.body as {
                     companyId: number;
@@ -70,8 +79,12 @@ export default async function (fastify: FastifyInstance) {
                     name: string;
                     department: number;
                     role: number;
+                    notify: string;
+                    salary: string;
                     permissions: string[];
                 };
+
+                console.log(notify)
 
                 const user = await isAuthenticated({ fastify, request: req });
                 if (!user)
@@ -134,14 +147,18 @@ export default async function (fastify: FastifyInstance) {
                                 department: Number(department),
                                 permissions,
                                 status: "active",
+                                // salary,
                             },
                         });
 
-                        sendCreatedUserEmail({
-                            email,
-                            name,
-                            password: randomPassword,
-                        });
+                        if (notify === "true") {
+                            sendCreatedUserEmail({
+                                email,
+                                name,
+                                password: randomPassword,
+                            });
+                        }
+
 
                         return reply
                             .status(200)
@@ -176,12 +193,15 @@ export default async function (fastify: FastifyInstance) {
                     },
                 });
 
-                sendInviteUserEmail({
-                    email: userExists.email,
-                    name: userExists.name,
-                    inviter: userData?.name || "Um usuário",
-                    company: companyData.name,
-                });
+                if (notify === "true") {
+                    sendInviteUserEmail({
+                        email: userExists.email,
+                        name: userExists.name,
+                        inviter: userData?.name || "Um usuário",
+                        company: companyData.name,
+                    });
+                }
+
 
                 return reply.status(200).send({ message: "user-invited" });
             } catch (err) {

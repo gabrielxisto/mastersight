@@ -24,9 +24,7 @@ import { Route as AuthAuthRegisterRouteImport } from './routes/_auth/auth.regist
 import { Route as AuthAuthForgotRouteImport } from './routes/_auth/auth.forgot'
 import { Route as AdminAdminDashboardRouteImport } from './routes/_admin/admin.dashboard'
 import { Route as AdminAdminAuthRouteImport } from './routes/_admin/admin.auth'
-import { Route as CompanyCompanyTeamGeneralRegisterRouteImport } from './routes/_company/company.team/general-register'
-import { Route as CompanyCompanyTeamFeedbacksRouteImport } from './routes/_company/company.team/feedbacks'
-import { Route as CompanyCompanyTeamEvaluationsRouteImport } from './routes/_company/company.team/evaluations'
+import { Route as CompanyCompanyArchiveTeamRouteImport } from './routes/_company/company.archive/team'
 import { Route as CompanyCompanyArchiveRolesRouteImport } from './routes/_company/company.archive/roles'
 import { Route as CompanyCompanyArchiveRewardsRouteImport } from './routes/_company/company.archive/rewards'
 import { Route as CompanyCompanyArchivePerformanceRouteImport } from './routes/_company/company.archive/performance'
@@ -115,22 +113,10 @@ const AdminAdminAuthRoute = AdminAdminAuthRouteImport.update({
   path: '/admin/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CompanyCompanyTeamGeneralRegisterRoute =
-  CompanyCompanyTeamGeneralRegisterRouteImport.update({
-    id: '/team/general-register',
-    path: '/team/general-register',
-    getParentRoute: () => CompanyCompanyRoute,
-  } as any)
-const CompanyCompanyTeamFeedbacksRoute =
-  CompanyCompanyTeamFeedbacksRouteImport.update({
-    id: '/team/feedbacks',
-    path: '/team/feedbacks',
-    getParentRoute: () => CompanyCompanyRoute,
-  } as any)
-const CompanyCompanyTeamEvaluationsRoute =
-  CompanyCompanyTeamEvaluationsRouteImport.update({
-    id: '/team/evaluations',
-    path: '/team/evaluations',
+const CompanyCompanyArchiveTeamRoute =
+  CompanyCompanyArchiveTeamRouteImport.update({
+    id: '/archive/team',
+    path: '/archive/team',
     getParentRoute: () => CompanyCompanyRoute,
   } as any)
 const CompanyCompanyArchiveRolesRoute =
@@ -218,9 +204,7 @@ export interface FileRoutesByFullPath {
   '/company/archive/performance': typeof CompanyCompanyArchivePerformanceRoute
   '/company/archive/rewards': typeof CompanyCompanyArchiveRewardsRoute
   '/company/archive/roles': typeof CompanyCompanyArchiveRolesRoute
-  '/company/team/evaluations': typeof CompanyCompanyTeamEvaluationsRoute
-  '/company/team/feedbacks': typeof CompanyCompanyTeamFeedbacksRoute
-  '/company/team/general-register': typeof CompanyCompanyTeamGeneralRegisterRoute
+  '/company/archive/team': typeof CompanyCompanyArchiveTeamRoute
   '/company/settings/appearance': typeof CompanyCompanySettingsSettingsAppearanceRoute
   '/company/settings/': typeof CompanyCompanySettingsSettingsIndexRoute
 }
@@ -244,9 +228,7 @@ export interface FileRoutesByTo {
   '/company/archive/performance': typeof CompanyCompanyArchivePerformanceRoute
   '/company/archive/rewards': typeof CompanyCompanyArchiveRewardsRoute
   '/company/archive/roles': typeof CompanyCompanyArchiveRolesRoute
-  '/company/team/evaluations': typeof CompanyCompanyTeamEvaluationsRoute
-  '/company/team/feedbacks': typeof CompanyCompanyTeamFeedbacksRoute
-  '/company/team/general-register': typeof CompanyCompanyTeamGeneralRegisterRoute
+  '/company/archive/team': typeof CompanyCompanyArchiveTeamRoute
   '/company/settings/appearance': typeof CompanyCompanySettingsSettingsAppearanceRoute
   '/company/settings': typeof CompanyCompanySettingsSettingsIndexRoute
 }
@@ -275,9 +257,7 @@ export interface FileRoutesById {
   '/_company/company/archive/performance': typeof CompanyCompanyArchivePerformanceRoute
   '/_company/company/archive/rewards': typeof CompanyCompanyArchiveRewardsRoute
   '/_company/company/archive/roles': typeof CompanyCompanyArchiveRolesRoute
-  '/_company/company/team/evaluations': typeof CompanyCompanyTeamEvaluationsRoute
-  '/_company/company/team/feedbacks': typeof CompanyCompanyTeamFeedbacksRoute
-  '/_company/company/team/general-register': typeof CompanyCompanyTeamGeneralRegisterRoute
+  '/_company/company/archive/team': typeof CompanyCompanyArchiveTeamRoute
   '/_company/company/_settings/settings/appearance': typeof CompanyCompanySettingsSettingsAppearanceRoute
   '/_company/company/_settings/settings/': typeof CompanyCompanySettingsSettingsIndexRoute
 }
@@ -307,9 +287,7 @@ export interface FileRouteTypes {
     | '/company/archive/performance'
     | '/company/archive/rewards'
     | '/company/archive/roles'
-    | '/company/team/evaluations'
-    | '/company/team/feedbacks'
-    | '/company/team/general-register'
+    | '/company/archive/team'
     | '/company/settings/appearance'
     | '/company/settings/'
   fileRoutesByTo: FileRoutesByTo
@@ -333,9 +311,7 @@ export interface FileRouteTypes {
     | '/company/archive/performance'
     | '/company/archive/rewards'
     | '/company/archive/roles'
-    | '/company/team/evaluations'
-    | '/company/team/feedbacks'
-    | '/company/team/general-register'
+    | '/company/archive/team'
     | '/company/settings/appearance'
     | '/company/settings'
   id:
@@ -363,9 +339,7 @@ export interface FileRouteTypes {
     | '/_company/company/archive/performance'
     | '/_company/company/archive/rewards'
     | '/_company/company/archive/roles'
-    | '/_company/company/team/evaluations'
-    | '/_company/company/team/feedbacks'
-    | '/_company/company/team/general-register'
+    | '/_company/company/archive/team'
     | '/_company/company/_settings/settings/appearance'
     | '/_company/company/_settings/settings/'
   fileRoutesById: FileRoutesById
@@ -485,25 +459,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAdminAuthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_company/company/team/general-register': {
-      id: '/_company/company/team/general-register'
-      path: '/team/general-register'
-      fullPath: '/company/team/general-register'
-      preLoaderRoute: typeof CompanyCompanyTeamGeneralRegisterRouteImport
-      parentRoute: typeof CompanyCompanyRoute
-    }
-    '/_company/company/team/feedbacks': {
-      id: '/_company/company/team/feedbacks'
-      path: '/team/feedbacks'
-      fullPath: '/company/team/feedbacks'
-      preLoaderRoute: typeof CompanyCompanyTeamFeedbacksRouteImport
-      parentRoute: typeof CompanyCompanyRoute
-    }
-    '/_company/company/team/evaluations': {
-      id: '/_company/company/team/evaluations'
-      path: '/team/evaluations'
-      fullPath: '/company/team/evaluations'
-      preLoaderRoute: typeof CompanyCompanyTeamEvaluationsRouteImport
+    '/_company/company/archive/team': {
+      id: '/_company/company/archive/team'
+      path: '/archive/team'
+      fullPath: '/company/archive/team'
+      preLoaderRoute: typeof CompanyCompanyArchiveTeamRouteImport
       parentRoute: typeof CompanyCompanyRoute
     }
     '/_company/company/archive/roles': {
@@ -626,9 +586,7 @@ interface CompanyCompanyRouteChildren {
   CompanyCompanyArchivePerformanceRoute: typeof CompanyCompanyArchivePerformanceRoute
   CompanyCompanyArchiveRewardsRoute: typeof CompanyCompanyArchiveRewardsRoute
   CompanyCompanyArchiveRolesRoute: typeof CompanyCompanyArchiveRolesRoute
-  CompanyCompanyTeamEvaluationsRoute: typeof CompanyCompanyTeamEvaluationsRoute
-  CompanyCompanyTeamFeedbacksRoute: typeof CompanyCompanyTeamFeedbacksRoute
-  CompanyCompanyTeamGeneralRegisterRoute: typeof CompanyCompanyTeamGeneralRegisterRoute
+  CompanyCompanyArchiveTeamRoute: typeof CompanyCompanyArchiveTeamRoute
 }
 
 const CompanyCompanyRouteChildren: CompanyCompanyRouteChildren = {
@@ -644,10 +602,7 @@ const CompanyCompanyRouteChildren: CompanyCompanyRouteChildren = {
   CompanyCompanyArchivePerformanceRoute: CompanyCompanyArchivePerformanceRoute,
   CompanyCompanyArchiveRewardsRoute: CompanyCompanyArchiveRewardsRoute,
   CompanyCompanyArchiveRolesRoute: CompanyCompanyArchiveRolesRoute,
-  CompanyCompanyTeamEvaluationsRoute: CompanyCompanyTeamEvaluationsRoute,
-  CompanyCompanyTeamFeedbacksRoute: CompanyCompanyTeamFeedbacksRoute,
-  CompanyCompanyTeamGeneralRegisterRoute:
-    CompanyCompanyTeamGeneralRegisterRoute,
+  CompanyCompanyArchiveTeamRoute: CompanyCompanyArchiveTeamRoute,
 }
 
 const CompanyCompanyRouteWithChildren = CompanyCompanyRoute._addFileChildren(

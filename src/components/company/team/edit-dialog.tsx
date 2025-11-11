@@ -70,8 +70,6 @@ export default function ({
     [key: number]: { id: number; name: string }[];
   }>({});
 
-  console.log(data.salary)
-
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {

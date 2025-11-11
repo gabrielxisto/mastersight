@@ -1,34 +1,24 @@
-import { useState } from "react";
-import { Shield, Key, MoreHorizontal } from "lucide-react";
-
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
-import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
 import { useCompanyStore } from "@/stores";
-import { ScrollArea } from "@radix-ui/react-scroll-area";
-import clsx from "clsx";
 import Competences from "./competences";
+import Feedbacks from "./feedbacks";
 
 export function TeamContent({ data }: { data: any }) {
   const company = useCompanyStore();
 
   return (
     <Tabs defaultValue="infos" className="space-y-5 pb-5">
-      <TabsList className="grid w-full grid-cols-4">
+      <TabsList className="grid w-full grid-cols-3">
         <TabsTrigger value="infos">Informações</TabsTrigger>
         <TabsTrigger value="competences">Competências</TabsTrigger>
-        <TabsTrigger value="security">Security</TabsTrigger>
-        <TabsTrigger value="notifications">Notifications</TabsTrigger>
+        <TabsTrigger value="feedbacks">Feedbacks</TabsTrigger>
       </TabsList>
 
-      <TabsContent value="infos" className="max-h-[28.4rem] space-y-5 overflow-y-scroll">
+      <TabsContent value="infos" className="max-h-[23.4rem] space-y-5 overflow-y-scroll scrollbar-hidden">
         <Card className="min-h-[28.4rem] mb-2">
           <CardHeader className="flex-col gap-1">
             <CardTitle>Informações</CardTitle>
@@ -84,14 +74,19 @@ export function TeamContent({ data }: { data: any }) {
         </Card>
       </TabsContent>
 
-      <Competences data={data} />
+      <Competences 
+        data={data} 
+      />
 
-      {/* Security Settings */}
-      <TabsContent value="security" className="space-y-6">
+      <Feedbacks 
+        data={data}
+      />
+
+      {/* <TabsContent value="feedbacks" className="space-y-6">
         <Card>
-          <CardHeader>
-            <CardTitle>Security Settings</CardTitle>
-            <CardDescription>Manage your account security and authentication.</CardDescription>
+          <CardHeader className="flex-col gap-1">
+            <CardTitle>Feedbacks</CardTitle>
+            <CardDescription>Visualize e adicione feedbacks para um membro da equipe.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="space-y-4">
@@ -148,68 +143,7 @@ export function TeamContent({ data }: { data: any }) {
             </div>
           </CardContent>
         </Card>
-      </TabsContent>
-
-      {/* Notification Settings */}
-      <TabsContent value="notifications" className="space-y-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Notification Preferences</CardTitle>
-            <CardDescription>Choose what notifications you want to receive.</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="space-y-1">
-                  <Label className="text-base">Email Notifications</Label>
-                  <p className="text-muted-foreground text-sm">Receive notifications via email</p>
-                </div>
-                <Switch defaultChecked />
-              </div>
-              <Separator />
-              <div className="flex items-center justify-between">
-                <div className="space-y-1">
-                  <Label className="text-base">Push Notifications</Label>
-                  <p className="text-muted-foreground text-sm">
-                    Receive push notifications in your browser
-                  </p>
-                </div>
-                <Switch />
-              </div>
-              <Separator />
-              <div className="flex items-center justify-between">
-                <div className="space-y-1">
-                  <Label className="text-base">Marketing Emails</Label>
-                  <p className="text-muted-foreground text-sm">
-                    Receive emails about new features and updates
-                  </p>
-                </div>
-                <Switch defaultChecked />
-              </div>
-              <Separator />
-              <div className="flex items-center justify-between">
-                <div className="space-y-1">
-                  <Label className="text-base">Weekly Summary</Label>
-                  <p className="text-muted-foreground text-sm">
-                    Get a weekly summary of your activity
-                  </p>
-                </div>
-                <Switch defaultChecked />
-              </div>
-              <Separator />
-              <div className="flex items-center justify-between">
-                <div className="space-y-1">
-                  <Label className="text-base">Security Alerts</Label>
-                  <p className="text-muted-foreground text-sm">
-                    Important security notifications (always enabled)
-                  </p>
-                </div>
-                <Switch checked disabled />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </TabsContent>
+      </TabsContent> */}
     </Tabs>
   );
 }

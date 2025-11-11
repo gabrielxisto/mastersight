@@ -18,72 +18,72 @@ import { House } from "lucide-react";
 import { useUserStore, useCompanyStore } from "@/stores/";
 import { useRouter } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
-
-const data = {
-  navMain: [
-    {
-      title: "Arquivo",
-      url: "#",
-      icon: BookOpen,
-      isActive: true,
-      items: [
-        {
-          title: "Departamentos",
-          url: "/company/archive/departments",
-        },
-        {
-          title: "Cargos",
-          url: "/company/archive/roles",
-        },
-        {
-          title: "Benefícios",
-          url: "/company/archive/benefits",
-        },
-        {
-          title: "Premiações",
-          url: "/company/archive/rewards",
-        },
-        {
-          title: "Desempenho",
-          url: "/company/archive/performance",
-        },
-        {
-          title: "Manuais",
-          url: "/company/archive/manuals",
-        },
-        {
-          title: "Comunicação",
-          url: "/company/archive/communication",
-        },
-      ],
-    },
-    {
-      title: "Equipe",
-      url: "#",
-      icon: Users,
-      items: [
-        {
-          title: "Cadastro Geral",
-          url: "/company/team/general-register",
-        },
-        {
-          title: "Feedbacks",
-          url: "/company/team/feedbacks",
-        },
-        {
-          title: "Aba de Avaliações",
-          url: "/company/team/evaluations",
-        },
-      ],
-    },
-  ],
-};
+import api from "@/services/api.service";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const [data, setData] = React.useState<any>([])
   const { state } = useSidebar();
   const { current: user } = useUserStore();
-  const { current: company } = useCompanyStore();
+  const { current: company, set: setCompany } = useCompanyStore();
   const router = useRouter();
+
+  React.useEffect(() => {
+    if (company) {
+      api.get(`/companies/team?companyId=${company?.id}`).then((response) => {
+        const userData = response.data.team.find((member: any) => member.userId === user?.id);
+      
+        if (userData) {
+          setCompany({
+            ...company,
+            permissions: userData.permissions
+          });
+
+          setData([
+            {
+              title: "Arquivo",
+              url: "#",
+              icon: BookOpen,
+              isActive: true,
+              items: [
+                {
+                  title: "Equipe",
+                  url: "/company/archive/team",
+                },
+                userData.permissions.includes("viewDepartments") ? {
+                  title: "Departamentos",
+                  url: "/company/archive/departments",
+                } : undefined,
+                userData.permissions.includes("viewRoles") ? {
+                  title: "Cargos",
+                  url: "/company/archive/roles",
+                } : undefined,
+                {
+                  title: "Benefícios",
+                  url: "/company/archive/benefits",
+                },
+                {
+                  title: "Premiações",
+                  url: "/company/archive/rewards",
+                },
+                {
+                  title: "Desempenho",
+                  url: "/company/archive/performance",
+                },
+                {
+                  title: "Manuais",
+                  url: "/company/archive/manuals",
+                },
+                {
+                  title: "Comunicação",
+                  url: "/company/archive/communication",
+                },
+              ],
+            }
+          ])
+        }
+      });
+    }
+  }, [company?.id]);
 
   return (
     <Sidebar collapsible="icon" {...props}>
@@ -125,7 +125,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <House />
           <span>Início</span>
         </SidebarMenuButton>
-        <NavMain items={data.navMain} />
+        <NavMain items={data} />
         <SidebarMenuButton
           onClick={() =>
             router.navigate({
